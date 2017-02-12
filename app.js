@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var passport = require('passport');
 var LocalStrategy = require('passport-local');
 var FacebookStrategy = require('passport-facebook');
+var GoogleStrategy = require('passport-google-oauth20').Strategy;
 var models = require('./models/models');
 var compression = require('compression')
 //linking file
@@ -77,6 +78,21 @@ passport.use(new FacebookStrategy({
     });
   }
 ));
+
+
+
+passport.use(new GoogleStrategy({
+    clientID: GOOGLE_CLIENT_ID,
+    clientSecret: GOOGLE_CLIENT_SECRET,
+    callbackURL: "http://www.example.com/auth/google/callback"
+  },
+  function(accessToken, refreshToken, profile, cb) {
+    User.findOrCreate({ googleId: profile.id }, function (err, user) {
+      return cb(err, user);
+    });
+  }
+));
+
 
 app.use('/', auth(passport));
 app.use('/', routes);
