@@ -5,47 +5,55 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var passport = require('passport');
-var LocalStrategy = require('passport-local');
+var LocalStrategy = require('passport-local').Strategy;
 var FacebookStrategy = require('passport-facebook');
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
 var models = require('./models/models');
-var compression = require('compression')
+var compression = require('compression');
+
 //linking file
-var routes = require('./routes/home');
+var routes = require('./routes/index');
 var auth = require('./routes/auth');
 var AWS = require('aws-sdk');
-AWS.config.loadFromPath('pathToJsonFile');
-var s3 = new AWS.S3();
-var bucketParams = {Bucket: 'myBucket'};
-s3.createBucket(bucketParams)
-var s3Bucket = new AWS.S3( { params: {Bucket: 'myBucket'} } )
-var data = {Key: imageName, Body: imageFile};
-s3Bucket.putObject(data, function(err, data){
-  if (err) 
-    { console.log('Error uploading data: ', data); 
-    } else {
-      console.log('succesfully uploaded the image!';
-    }
-});
-var urlParams = {Bucket: 'myBucket', Key: 'imageName'};
-s3Bucket.getSignedUrl('getObject', urlParams, function(err, url){
-  console.log('the url of the image is', url);
-});
-var params = {Bucket: 'myBucket'};
-s3.listObjects(params, function(err, data){
-  var bucketContents = data.Contents;
-    for (var i = 0; i < bucketContents.length; i++){
-      var urlParams = {Bucket: 'myBucket', Key: bucketContents[i].Key};
-        s3.getSignedUrl('getObject',urlParams, function(err, url){
-          console.log('the url of the image is', url);
-        });
-    }
-});
+// AWS.config.loadFromPath('pathToJsonFile');
+// var s3 = new AWS.S3();
+// var bucketParams = {Bucket: 'myBucket'};
+// s3.createBucket(bucketParams)
+// var s3Bucket = new AWS.S3( { params: {Bucket: 'myBucket'} } )
+// var data = {Key: imageName, Body: imageFile};
+// s3Bucket.putObject(data, function(err, data){
+//   if (err) 
+//     { console.log('Error uploading data: ', data); 
+//     } else {
+//       console.log('succesfully uploaded the image!';
+//     }
+// });
+// var urlParams = {Bucket: 'myBucket', Key: 'imageName'};
+// s3Bucket.getSignedUrl('getObject', urlParams, function(err, url){
+//   console.log('the url of the image is', url);
+// });
+// var params = {Bucket: 'myBucket'};
+// s3.listObjects(params, function(err, data){
+//   var bucketContents = data.Contents;
+//     for (var i = 0; i < bucketContents.length; i++){
+//       var urlParams = {Bucket: 'myBucket', Key: bucketContents[i].Key};
+//         s3.getSignedUrl('getObject',urlParams, function(err, url){
+//           console.log('the url of the image is', url);
+//         });
+//     }
+// });
 
 var app = express();
 app.use(compression());
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
+
+app.set('view engine', 'hbs');
+var hbs = require('express-handlebars')({
+  defaultLayout: 'layout',
+  extname: '.hbs'
+});
+app.engine('hbs', hbs);
 app.set('view engine', 'hbs');
 
 app.use(logger('dev'));
@@ -55,8 +63,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Passport stuff here
-
-app.use(session({secret: process.env.SECRET}));
+var session = require('express-session');
+app.use(session({secret: 'NewVuew'}));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -95,9 +103,9 @@ passport.use(new LocalStrategy(function(username, password, done) {
 ));
 
 passport.use(new FacebookStrategy({
-    clientID: process.env.FB_CLIENT_ID,
-    clientSecret: process.env.FB_CLIENT_SECRET,
-    callbackURL: process.env.callbackURL
+    clientID: process.env.FACEBOOK_APP_ID,
+    clientSecret: process.env.FACEBOOK_APP_SECRET,
+    callbackURL: "http://localhost:3000/auth/facebook/callback"
   },
   function(accessToken, refreshToken, profile, cb) {
     models.User.findOrCreate({ facebookId: profile.id }, function (err, user) {
@@ -107,8 +115,8 @@ passport.use(new FacebookStrategy({
 ));
 
 passport.use(new GoogleStrategy({
-    clientID: GOOGLE_CLIENT_ID,
-    clientSecret: GOOGLE_CLIENT_SECRET,
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: "http://www.example.com/auth/google/callback"
   },
   function(accessToken, refreshToken, profile, cb) {
@@ -147,3 +155,5 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
+
+app.listen("3000");

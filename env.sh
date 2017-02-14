@@ -1,6 +1,5 @@
-export FB_CLIENT_ID="?"
-export FB_CLIENT_SECRET="6b42bd63d677aa152c51ba09f4de916541af6816"
-export callbackURL = "http://localhost:3000/auth/facebook/callback"
+export FACEBOOK_APP_ID='714255962085965'
+export FACEBOOK_APP_SECRET='cb622f707d0c5aa78a4b1a5af29f5c10'
 
-export GOOGLE_CLIENT_ID = 
-export GOOGLE_CLIENT_SECRET =
+export GOOGLE_CLIENT_ID="199375453961-1h06ptnlk3mot443l5lso825bkia8307.apps.googleusercontent.com"
+export GOOGLE_CLIENT_SECRET="i0Ob5UOeQeX9FuBDyXDtPGVX"

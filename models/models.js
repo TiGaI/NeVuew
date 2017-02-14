@@ -1,8 +1,9 @@
 var mongoose = require('mongoose');
 var findOrCreate = require('mongoose-findorcreate');
+
+
 var connect = process.env.MONGODB_URI || require('./connect');
 var express = require('express')
-
 
 mongoose.connect(connect);
 
@@ -24,7 +25,8 @@ var Card = mongoose.Schema({
   CardTime: Date,
   CardAddress: String,
   created: Date,
-  image: Array,
+  image: String,
+  // video: Content,
   // category: String
 });
 
@@ -45,21 +47,36 @@ var Message = mongoose.Schema({
     }
 });
 
-Card.plugin(crate, {
-    storage: new S3({
-        key: process.env.KEY,
-        secret: process.env.SECRET,
-        bucket: process.env.BUCKET,
-        acl: 'public-read', // defaults to public-read
-        region: 'eu-west-1', // defaults to us-standard
-        path: function(attachment) { // where the file is stored in the bucket - defaults to this function
-            return '/' + attachment.name
+// Card.plugin(crate, {
+//     storage: new S3({
+//         key: process.env.KEY,
+//         secret: process.env.SECRET,
+//         bucket: process.env.BUCKET,
+//         acl: 'public-read', // defaults to public-read
+//         region: 'eu-west-1', // defaults to us-standard
+//         path: function(attachment) { // where the file is stored in the bucket - defaults to this function
+//             return '/' + attachment.name
+//         }
+//     }),
+//     fields: {
+//         file: {}
+//     }
+// });
+
+User.statics.findOrCreate = function findOrCreate(profile, cb){
+    var user = new this();
+    this.findOne({facebookId : profile.id},function(err, result){
+        if(! result) {
+            user.username = profile.displayName;
+            user.facebookId = profile.id;
+            user.save(cb);
+        } else {
+            cb(err,result);
         }
-    }),
-    fields: {
-        file: {}
-    }
-});
+    });
+};
+
+
 
 module.exports = {
     Card: mongoose.model('Card', Card),
