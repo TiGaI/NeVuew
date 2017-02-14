@@ -13,7 +13,34 @@ var compression = require('compression')
 //linking file
 var routes = require('./routes/home');
 var auth = require('./routes/auth');
-
+var AWS = require('aws-sdk');
+AWS.config.loadFromPath('pathToJsonFile');
+var s3 = new AWS.S3();
+var bucketParams = {Bucket: 'myBucket'};
+s3.createBucket(bucketParams)
+var s3Bucket = new AWS.S3( { params: {Bucket: 'myBucket'} } )
+var data = {Key: imageName, Body: imageFile};
+s3Bucket.putObject(data, function(err, data){
+  if (err) 
+    { console.log('Error uploading data: ', data); 
+    } else {
+      console.log('succesfully uploaded the image!';
+    }
+});
+var urlParams = {Bucket: 'myBucket', Key: 'imageName'};
+s3Bucket.getSignedUrl('getObject', urlParams, function(err, url){
+  console.log('the url of the image is', url);
+});
+var params = {Bucket: 'myBucket'};
+s3.listObjects(params, function(err, data){
+  var bucketContents = data.Contents;
+    for (var i = 0; i < bucketContents.length; i++){
+      var urlParams = {Bucket: 'myBucket', Key: bucketContents[i].Key};
+        s3.getSignedUrl('getObject',urlParams, function(err, url){
+          console.log('the url of the image is', url);
+        });
+    }
+});
 
 var app = express();
 app.use(compression());
@@ -79,8 +106,6 @@ passport.use(new FacebookStrategy({
   }
 ));
 
-
-
 passport.use(new GoogleStrategy({
     clientID: GOOGLE_CLIENT_ID,
     clientSecret: GOOGLE_CLIENT_SECRET,
@@ -93,7 +118,6 @@ passport.use(new GoogleStrategy({
   }
 ));
 
-
 app.use('/', auth(passport));
 app.use('/', routes);
 
@@ -104,10 +128,6 @@ app.use(function(req, res, next) {
   next(err);
 });
 
-// error handlers
-
-// development error handler
-// will print stacktrace
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
@@ -118,8 +138,6 @@ if (app.get('env') === 'development') {
   });
 }
 
-// production error handler
-// no stacktraces leaked to user
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error', {
@@ -127,6 +145,5 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
 
 module.exports = app;
