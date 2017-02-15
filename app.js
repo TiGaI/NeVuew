@@ -5,20 +5,30 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var passport = require('passport');
-var LocalStrategy = require('passport-local');
+var LocalStrategy = require('passport-local').Strategy;
 var FacebookStrategy = require('passport-facebook');
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
 var models = require('./models/models');
-var compression = require('compression')
-//linking file
-var routes = require('./routes/home');
-var auth = require('./routes/auth');
+var compression = require('compression');
 
+//linking file
+var routes = require('./routes/index');
+var auth = require('./routes/auth');
+var message = require('./routes/message');
+var card = require('./routes/card');
+var other = require('./routes/other');
 
 var app = express();
 app.use(compression());
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
+
+app.set('view engine', 'hbs');
+var hbs = require('express-handlebars')({
+  defaultLayout: 'layout',
+  extname: '.hbs'
+});
+app.engine('hbs', hbs);
 app.set('view engine', 'hbs');
 
 app.use(logger('dev'));
@@ -28,8 +38,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Passport stuff here
-
-app.use(session({secret: process.env.SECRET}));
+var session = require('express-session');
+app.use(session({secret: 'NewVuew'}));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -68,9 +78,9 @@ passport.use(new LocalStrategy(function(username, password, done) {
 ));
 
 passport.use(new FacebookStrategy({
-    clientID: process.env.FB_CLIENT_ID,
-    clientSecret: process.env.FB_CLIENT_SECRET,
-    callbackURL: process.env.callbackURL
+    clientID: process.env.FACEBOOK_APP_ID,
+    clientSecret: process.env.FACEBOOK_APP_SECRET,
+    callbackURL: "http://localhost:3000/auth/facebook/callback"
   },
   function(accessToken, refreshToken, profile, cb) {
     models.User.findOrCreate({ facebookId: profile.id }, function (err, user) {
@@ -79,11 +89,9 @@ passport.use(new FacebookStrategy({
   }
 ));
 
-
-
 passport.use(new GoogleStrategy({
-    clientID: GOOGLE_CLIENT_ID,
-    clientSecret: GOOGLE_CLIENT_SECRET,
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: "http://www.example.com/auth/google/callback"
   },
   function(accessToken, refreshToken, profile, cb) {
@@ -92,7 +100,6 @@ passport.use(new GoogleStrategy({
     });
   }
 ));
-
 
 app.use('/', auth(passport));
 app.use('/', routes);
@@ -104,10 +111,6 @@ app.use(function(req, res, next) {
   next(err);
 });
 
-// error handlers
-
-// development error handler
-// will print stacktrace
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
@@ -118,8 +121,6 @@ if (app.get('env') === 'development') {
   });
 }
 
-// production error handler
-// no stacktraces leaked to user
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error', {
@@ -128,5 +129,6 @@ app.use(function(err, req, res, next) {
   });
 });
 
-
 module.exports = app;
+
+app.listen("3000");

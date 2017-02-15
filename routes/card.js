@@ -12,6 +12,7 @@ var Card  = require('../models/models').Card;
 /* GET home page. */
 router.post('/', function(req, res){
 
+
 });
 
 
