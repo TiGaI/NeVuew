@@ -40,14 +40,14 @@ module.exports = function(passport) {
   });
 
   // GET Login page
-  router.get('/login', function(req, res) {
+  router.get('/', function(req, res) {
     res.render('login');
   });
 
 
   // POST Login page
-  router.post('/login', passport.authenticate('local'), function(req, res) {
-    res.redirect('/home');
+  router.post('/', passport.authenticate('local'), function(req, res) {
+    res.redirect('/event');
   });
 
   // GET Logout page

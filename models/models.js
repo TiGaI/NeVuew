@@ -12,13 +12,13 @@ var userSchema = new mongoose.Schema({
   created: Date,
   email: String,
   image: String,
-  activeCards: [mongoose.Schema.Types.ObjectId],
+  activeEvents: [mongoose.Schema.Types.ObjectId],
   connections: [mongoose.Schema.Types.ObjectId],
   profile: mongoose.Schema.Types.ObjectId,
   admin: {
   	type: Boolean,
   	default: true
-  }
+  },
 });
 
 var userConnectionSchema = new mongoose.Schema({
@@ -42,12 +42,13 @@ var potentialConnectionSchema = new mongoose.Schema({
     ref: 'User'
   }
 })
-var cardSchema = new mongoose.Schema({
+
+var eventSchema = new mongoose.Schema({
   title: String,
   coordinator: String,
   de: String,
-  CardTime: Date,
-  CardAddress: String,
+  EventTime: Date,
+  EventAddress: String,
   created: Date,
   image: Array,
   // category: String
@@ -160,13 +161,14 @@ userSchema.methods.getConnections = function(callback){
 
 var Message = mongoose.model("Message", messageSchema);
 var User = mongoose.model("User", userSchema);
-var UserConnection = mongoose.model("UserConnection", userConnectionSchema);
+var Connection = mongoose.model("UserConnection", userConnectionSchema);
 var PotentialConnection = mongoose.model("PotentialConnection", potentialConnectionSchema);
+var Event = mongoose.model("Event", eventSchema);
 
 module.exports = {
-    // Card: mongoose.model('Card', Card),
     Message: Message,
     User: User,
-    UserConnection: UserConnection,
+    Event: Event,
+    UserConnection: Connection,
     PotentialConnection: PotentialConnection
 };
