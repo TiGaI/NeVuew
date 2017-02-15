@@ -2,8 +2,9 @@ var mongoose = require('mongoose');
 var findOrCreate = require('mongoose-findorcreate');
 var connect = process.env.MONGODB_URI || require('./connect');
 var express = require('express')
+// var userConnection = require('../userConnection')
 
-mongoose.connect(connect);
+// mongoose.connect(connect);
 
 var userSchema = new mongoose.Schema({
   //How can we keep track of User Activity?
@@ -12,6 +13,7 @@ var userSchema = new mongoose.Schema({
   email: String,
   image: String,
   activeCards: [mongoose.Schema.Types.ObjectId],
+  connections: [mongoose.Schema.Types.ObjectId],
   profile: mongoose.Schema.Types.ObjectId,
   admin: {
   	type: Boolean,
@@ -20,8 +22,8 @@ var userSchema = new mongoose.Schema({
 });
 
 var userConnectionSchema = new mongoose.Schema({
-  user1 = {
-    type: mongoose.Schema.Types.ObjectId
+  user1: {
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   },
   user2: {
@@ -31,12 +33,12 @@ var userConnectionSchema = new mongoose.Schema({
 })
 
 var potentialConnectionSchema = new mongoose.Schema({
-  user = {
+  user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   },
-  potentialMatch = {
-    type: monogoose.Schema.Types.ObjectId,
+  potentialMatch: {
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   }
 })
@@ -68,23 +70,103 @@ var messageSchema = new mongoose.Schema({
     }
 });
 
-User.statics.findOrCreate = function findOrCreate(profile, cb){
-    var user = new this();
-    this.findOne({facebookId : profile.id},function(err, result){
-        if(! result) {
-            user.username = profile.displayName;
-            user.facebookId = profile.id;
-            user.save(cb);
-        } else {
-            cb(err,result);
+//Add Schema Methods
+userSchema.methods.makeConnection = function(idToConnect, callback){
+  var myId = this._id;
+  PotentialConnection.findOne({user: idToConnect, potentialMatch: myId})
+  .exec(function(err, potConnect){
+    if (err){
+      callback(err)
+    }
+    if (potConnect){
+      var userConnection = new UserConnection({
+        user1: myId,
+        user2: idToConnect
+      });
+      potConnect.remove();
+      userConnection.save(function(err, userConnection){
+        if (err){
+          callback(err);
         }
-    });
+        callback(null, userConnection) // Do Something with User Connection
+      })
+    } else {
+      var potentialConnection = new PotentialConnection({
+        user: myId,
+        potentialMatch: idToConnect
+      });
+      potentialConnection.save(err);
+      if(err) res.send(err)
+      callback(err, potentialConnection) //Do something with potentialConnection
+      // A lot of things can happen here. We can either make a potentialConnection
+      // Or we can keep track that of who liked whom/didnt't like whom
+    }
+  });
 };
+
+userSchema.methods.isConnected = function(idToCheck, callback){
+  var myId = this._id;
+  console.log(myId)
+  UserConnection.findOne({user1: myId, user2: idToCheck}, function(err, connection){
+    if (err) res.send(err)
+    console.log('first find ', connection)
+    if (connection) {
+      callback(null, true);
+    } else {
+      UserConnection.findOne({user1: idToCheck, user2: myId}, function(err, connection){
+        if (err) res.send(err)
+        console.log('second find ', connection)
+        if (connection) {
+          callback(null, true);
+        } else{
+          callback(null, false);
+        }
+      });
+    }
+  });
+};
+
+userSchema.methods.getConnections = function(callback){
+  var allConnections = [];
+  UserConnection.find({user1: this_id}, function(err, connections1){
+    if (err) res.send(err)
+    allConnections.push(connections1);
+    UserConnection.find({user2: this_id}, function(err, connections2){
+      if(err) res.send(err)
+      allConnections.push(connections2);
+      //
+      //Implement Sort Function
+      //
+      callback(err, allConnections);
+    });
+  });
+};
+
+// userSchema.statics.findByNumActiveCards
+// userSchema.virtual.getActivity =
+
+// userSchema.statics.findOrCreate = function findOrCreate(profile, cb){
+//     var user = new this();
+//     this.findOne({facebookId : profile.id},function(err, result){
+//         if(! result) {
+//             user.username = profile.displayName;
+//             user.facebookId = profile.id;
+//             user.save(cb);
+//         } else {
+//             cb(err,result);
+//         }
+//     });
+// };
+
+var Message = mongoose.model("Message", messageSchema);
+var User = mongoose.model("User", userSchema);
+var UserConnection = mongoose.model("UserConnection", userConnectionSchema);
+var PotentialConnection = mongoose.model("PotentialConnection", potentialConnectionSchema);
 
 module.exports = {
     // Card: mongoose.model('Card', Card),
-    Message: mongoose.model("Message", messageSchema),
-    User: mongoose.model("User", userSchema),
-    UserConnection: mongoose.model("UserConnection", userConnectionSchema),
-    PotentialConnection: monogose.model("PotentialConnection", potentialConnectionSchema)
+    Message: Message,
+    User: User,
+    UserConnection: UserConnection,
+    PotentialConnection: PotentialConnection
 };
