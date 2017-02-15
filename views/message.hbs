@@ -1,12 +1,22 @@
-<h3>Message Board</h3>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="page-header">
+    {{#unless error}}
+      <div class="page-header">
+        <h3>Messages received</h3>
+      </div>
 
-<ul>
-{{#each Message}}
-
-<li>{{user}}</li>
-<li>{{content}}</li>
-<li>{{created}}</li>
-<li>{{SendUser}}</li>
-
-{{/each}}
-</ul>
+      {{#each messages}}
+      <div class="well">
+        <form action="/exercise2/delete/{{_id}}" method="post" class="form-inline">
+          <button class="btn btn-danger pull-right">Delete</button>
+        </form>
+        <p><strong>From</strong> {{from.username}}</p>
+        <p><strong>To</strong> {{../user.username}}</p>
+        <p><strong>Message</strong> {{{body}}}</p>
+      </div>
+      {{/each}}
+    {{/unless}}
+    <!-- MESSENGER END -->
+  </div>
+</div>
