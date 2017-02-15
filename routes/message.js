@@ -6,8 +6,8 @@ var express = require('express'),
 var router = express.Router();
 
 var User  = require('../models/models').User;
-var Event  = require('../models/models').Event;
-
+var Card  = require('../models/models').Card;
+var Message  = require('../models/models').Message;
 
 /* GET home page. */
 router.post('/', function(req, res){

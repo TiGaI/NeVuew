@@ -47,22 +47,6 @@ var Message = mongoose.Schema({
     }
 });
 
-// Card.plugin(crate, {
-//     storage: new S3({
-//         key: process.env.KEY,
-//         secret: process.env.SECRET,
-//         bucket: process.env.BUCKET,
-//         acl: 'public-read', // defaults to public-read
-//         region: 'eu-west-1', // defaults to us-standard
-//         path: function(attachment) { // where the file is stored in the bucket - defaults to this function
-//             return '/' + attachment.name
-//         }
-//     }),
-//     fields: {
-//         file: {}
-//     }
-// });
-
 User.statics.findOrCreate = function findOrCreate(profile, cb){
     var user = new this();
     this.findOne({facebookId : profile.id},function(err, result){
@@ -75,8 +59,6 @@ User.statics.findOrCreate = function findOrCreate(profile, cb){
         }
     });
 };
-
-
 
 module.exports = {
     Card: mongoose.model('Card', Card),
