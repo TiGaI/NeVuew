@@ -6,18 +6,52 @@ var express = require('express')
 
 // mongoose.connect(connect);
 
+var userActionSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  eventCard: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'EventCard'
+  },
+  likeOrDislike: Boolean; // true refers to like, false refers to dislike.
+})
+
 var userSchema = new mongoose.Schema({
   //How can we keep track of User Activity?
-  name: String,
+  fname: {
+    type: String,
+    required: true
+  },
+  lname: {
+    type: String,
+    required: true
+  },
+  //Need to Hash Password
+  password: {
+    type: String,
+    required: true
+  },
+  bio: {
+    type: String,
+    default: ""
+  },
   created: Date,
-  email: String,
+  email: {
+    type: String,
+    required: true
+  }
   image: String,
-  activeCards: [mongoose.Schema.Types.ObjectId],
+  videos: [String],
+  activeEvents: [mongoose.Schema.Types.ObjectId],
   connections: [mongoose.Schema.Types.ObjectId],
-  profile: mongoose.Schema.Types.ObjectId,
   admin: {
   	type: Boolean,
-  	default: true
+  	default: false
+  },
+  rating: {
+    type: Number
   }
 });
 
@@ -32,24 +66,24 @@ var userConnectionSchema = new mongoose.Schema({
   }
 })
 
-var potentialConnectionSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+var eventSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true
   },
-  potentialMatch: {
+  owner: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  }
-})
-var cardSchema = new mongoose.Schema({
-  title: String,
-  coordinator: String,
-  de: String,
-  CardTime: Date,
-  CardAddress: String,
-  created: Date,
+    ref: 'User',
+    required: true
+  },
+  category: String,
+  dateCreated: String,
+  eventStartTime: Date,
+  eventEndTime: Date
+  location: String,
   image: Array,
+  video: String,
+  usersAttending: [mongoose.Schema.Types.ObjectId]
   // category: String
 });
 
@@ -58,85 +92,31 @@ var messageSchema = new mongoose.Schema({
       type: String,
       required: true
     },
-    to: {
+    toUser: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: 'User'
     },
-    from: {
+    fromUser: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: 'User'
+    },
+    dateCreated :{
+      type: Date,
+      required: true
     }
 });
 
 //Add Schema Methods
-userSchema.methods.makeConnection = function(idToConnect, callback){
-  var myId = this._id;
-  PotentialConnection.findOne({user: idToConnect, potentialMatch: myId})
-  .exec(function(err, potConnect){
-    if (err){
-      callback(err)
-    }
-    if (potConnect){
-      var userConnection = new UserConnection({
-        user1: myId,
-        user2: idToConnect
-      });
-      potConnect.remove();
-      userConnection.save(function(err, userConnection){
-        if (err){
-          callback(err);
-        }
-        callback(null, userConnection) // Do Something with User Connection
-      })
-    } else {
-      var potentialConnection = new PotentialConnection({
-        user: myId,
-        potentialMatch: idToConnect
-      });
-      potentialConnection.save(err);
-      if(err) res.send(err)
-      callback(err, potentialConnection) //Do something with potentialConnection
-      // A lot of things can happen here. We can either make a potentialConnection
-      // Or we can keep track that of who liked whom/didnt't like whom
-    }
-  });
-};
 
 userSchema.methods.isConnected = function(idToCheck, callback){
-  var myId = this._id;
-  console.log(myId)
-  UserConnection.findOne({user1: myId, user2: idToCheck}, function(err, connection){
-    if (err) res.send(err)
-    console.log('first find ', connection)
-    if (connection) {
-      callback(null, true);
-    } else {
-      UserConnection.findOne({user1: idToCheck, user2: myId}, function(err, connection){
-        if (err) res.send(err)
-        console.log('second find ', connection)
-        if (connection) {
-          callback(null, true);
-        } else{
-          callback(null, false);
-        }
-      });
-    }
-  });
+  var connection = this.connections.includes(idTOCheck)
+  callback(null, connection)
 };
 
-userSchema.methods.getConnections = function(callback){
-  var allConnections = [];
-  UserConnection.find({user1: this_id}, function(err, connections1){
-    if (err) res.send(err)
-    allConnections.push(connections1);
-    UserConnection.find({user2: this_id}, function(err, connections2){
-      if(err) res.send(err)
-      allConnections.push(connections2);
-      //
-      //Implement Sort Function
-      //
+userSchema.methods.getConnectionsSorted = function(callback){
+  var allconnections = this,connections.reverse();
       callback(err, allConnections);
     });
   });
@@ -145,28 +125,19 @@ userSchema.methods.getConnections = function(callback){
 // userSchema.statics.findByNumActiveCards
 // userSchema.virtual.getActivity =
 
-// userSchema.statics.findOrCreate = function findOrCreate(profile, cb){
-//     var user = new this();
-//     this.findOne({facebookId : profile.id},function(err, result){
-//         if(! result) {
-//             user.username = profile.displayName;
-//             user.facebookId = profile.id;
-//             user.save(cb);
-//         } else {
-//             cb(err,result);
-//         }
-//     });
-// };
 
 var Message = mongoose.model("Message", messageSchema);
 var User = mongoose.model("User", userSchema);
-var UserConnection = mongoose.model("UserConnection", userConnectionSchema);
-var PotentialConnection = mongoose.model("PotentialConnection", potentialConnectionSchema);
+// var UserConnection = mongoose.model("UserConnection", userConnectionSchema);
+// var PotentialConnection = mongoose.model("PotentialConnection", potentialConnectionSchema);
+var UserAction = mongoose.model("UserAction", userActionSchema);
+var EventCard = mongoose.model("EventCard", eventSchema)
 
 module.exports = {
-    // Card: mongoose.model('Card', Card),
     Message: Message,
     User: User,
     UserConnection: UserConnection,
-    PotentialConnection: PotentialConnection
+    UserAction: UserAction,
+    EventCard: EventCard
+
 };
