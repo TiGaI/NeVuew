@@ -1,1 +1,1 @@
-module.exports = 'mongodb://admin:asdfghjkl@ds023245.mlab.com:23245/newveuw-hack';
+module.exports = 'mongodb://mazairaj:ripgoose123@ds013004.mlab.com:13004/newveuw-hack'
