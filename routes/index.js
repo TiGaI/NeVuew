@@ -1,11 +1,17 @@
-var express = require('express');
+var express = require('express'),
+    aws = require('aws-sdk'),
+    bodyParser = require('body-parser'),
+    multer = require('multer'),
+    multerS3 = require('multer-s3');
 var router = express.Router();
-var Contact  = require('../models/models').Contact;
+
+var User  = require('../models/models').User;
+var Event  = require('../models/models').Event;
 
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-    res.render('home')
+router.post('/', function(req, res){
+
 });
 
 
