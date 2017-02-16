@@ -45,7 +45,7 @@ router.post('/makeUser', function(req, res){
 })
 
 router.post('/makeEvent', function(req, res){
-  var evenCard = new models.EventCard({
+  var eventCard = new models.EventCard({
     title: req.body.title,
     owner: req.body.userId,
     category: req.body.category,
@@ -54,6 +54,38 @@ router.post('/makeEvent', function(req, res){
     eventEndTime: new Date(),
     location: req.body.location,
     usersAttending: []
+  })
+  eventCard.save(function(err){
+    if (err) {
+      res.send(err)
+    } else {
+      res.send('posted Event')
+    }
+  })
+})
+
+router.post('/getEvents', function(req, res) {
+  console.log(req.query);
+  var sort = req.query.sort;
+  //Will eventually implement AJAX
+  var myId = req.body.user; //This would be req.user in practice
+  models.User.findById(myId).exec(function(err, user){
+    user.findSeenEvents(function(err, events){
+      models.EventCard.find({_id: {"$nin": events}})
+      .sort({sort: -1})
+      .limit(10)
+      .exec(
+        err, function(err, eventsQueue){
+          if (err) res.send(err)
+          res.json(eventsQueue) //Populate events deck on platform with a render in ajax/handlebars
+        })
+      })
+    })
+  })
+
+router.get('/getEvents/:eventId', function(req, res){
+  EventCard.findById(req.param._id).exec(function(err, eventCard){
+    res.render(LAYOUT, Images: eventCard.image)
   })
 })
 

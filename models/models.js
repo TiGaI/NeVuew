@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var findOrCreate = require('mongoose-findorcreate');
 var connect = process.env.MONGODB_URI || require('./connect');
-var express = require('express')
+var express = require('express');
 // var userConnection = require('../userConnection')
 
 // mongoose.connect(connect);
@@ -15,7 +15,7 @@ var userActionSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'EventCard'
   },
-  likeOrDislike: Boolean; // true refers to like, false refers to dislike.
+  likeOrDislike: Boolean // true refers to like, false refers to dislike.
 })
 
 var userSchema = new mongoose.Schema({
@@ -41,71 +41,65 @@ var userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true
-  }
+  },
   image: String,
   videos: [String],
   activeEvents: [mongoose.Schema.Types.ObjectId],
   connections: [mongoose.Schema.Types.ObjectId],
   admin: {
-  	type: Boolean,
-  	default: false
+    type: Boolean,
+    default: false
   },
   rating: {
     type: Number
+  },
+  eventQueue : {
+    type: [EventCard]
   }
 });
-
-var userConnectionSchema = new mongoose.Schema({
-  user1: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  },
-  user2: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  }
-})
 
 var eventSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: true
+    // required: true
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true
+    // required: true
   },
   category: String,
   dateCreated: Date,
   eventStartTime: Date,
-  eventEndTime: Date
+  eventEndTime: Date,
   location: String,
   image: Array,
   video: String,
-  usersAttending: [mongoose.Schema.Types.ObjectId]
+  usersAttending: [mongoose.Schema.Types.ObjectId],
   // category: String
+  likes: [],
+  dislike:[]
 });
 
 var messageSchema = new mongoose.Schema({
-	body: {
-      type: String,
-      required: true
-    },
-    toUser: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: 'User'
-    },
-    fromUser: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: 'User'
-    },
-    dateCreated :{
-      type: Date,
-      required: true
-    }
+  body: {
+    type: String,
+    required: true
+  },
+  toUser: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'User'
+  },
+  fromUser: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'User'
+  },
+  dateCreated :{
+    type: Date,
+    required: true
+  }
 });
 
 //Add Schema Methods
@@ -116,9 +110,19 @@ userSchema.methods.isConnected = function(idToCheck, callback){
 };
 
 userSchema.methods.getConnectionsSorted = function(callback){
-  var allconnections = this,connections.reverse();
-      callback(err, allConnections);
+  var allconnections = this.connections.reverse();
+  callback(err, allConnections);
 };
+
+userSchema.methods.findSeenEvents = function(callback){
+  UserAction.find({user: this._id}, function(err, actions){
+    if (err) res.send(err)
+    var seenEvents = actions.map(function(action){
+      return action.eventCard;
+    })
+    callback(null, seenEvents)
+  })
+}
 
 // userSchema.statics.findByNumActiveCards
 // userSchema.virtual.getActivity =
@@ -132,8 +136,8 @@ var UserAction = mongoose.model("UserAction", userActionSchema);
 var EventCard = mongoose.model("EventCard", eventSchema)
 
 module.exports = {
-    Message: Message,
-    User: User,
-    UserAction: UserAction,
-    EventCard: EventCard
+  Message: Message,
+  User: User,
+  UserAction: UserAction,
+  EventCard: EventCard
 };
