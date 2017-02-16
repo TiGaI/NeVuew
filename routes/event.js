@@ -9,8 +9,9 @@ var router = express.Router();
 var User  = require('../models/models').User;
 var Event  = require('../models/models').Event;
 
-var app = express()
 var s3 = new aws.S3();
+router.use(bodyParser.json());
+router.use(bodyParser.urlencoded({ extended: false }));
 
 var upload = multer({
   storage: multerS3({
@@ -43,7 +44,7 @@ router.get('/event', function(req, res){
 
 //accesss the more information on the event
 //note: this controller will be gone later once we incoorporate jquery
-router.get('/event/:id', function(req, res){
+router.get('/event/:eventId', function(req, res){
 
 
 });
@@ -88,7 +89,6 @@ router.post('/likes/:eventid', function(req, res){
 router.get('/notifications', function(req, res){
 
 
-
 });
 
 //Owner can decide whether or not he will accept/decline the person
@@ -101,6 +101,8 @@ router.get('/notifications', function(req, res){
 //you guy are connected! Let have a adventure together
 
 //Note: time limit will be add later.
+//Later on: the owner can set auto-accept for trust worthy people with
+//higher rating
 router.post('/notifications', function(req, res){
 
 
