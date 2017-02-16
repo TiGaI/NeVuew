@@ -69,6 +69,7 @@ var eventSchema = new mongoose.Schema({
     // required: true
   },
   category: String,
+  price: Number,
   dateCreated: Date,
   eventStartTime: Date,
   eventEndTime: Date,

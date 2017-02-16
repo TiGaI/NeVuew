@@ -1,53 +1,50 @@
 <h3>Card Creator</h3>
-<form method="POST">
+<form action="/makeEvent" method="POST" enctype="multipart/form-data">
 
   <div class="form-group">
-    <label>Name</label>
-    <input type="text" value="{{card.name}}" name="coordinator" class="form-control">
+    <label>Title</label>
+    <input type="text" value="{{event.title}}" name="title" class="form-control">
+  </div>
+
+  <div class="form-group">
+    <label>Creator</label>
+    <input type="text" value="{{event.owner}}" name="owner" class="form-control">
   </div>
 
   <div class="form-group">
     <label>Price</label>
-    <input type="number" value="{{card.price}}" name="title" class="form-control">
+    <input type="number" value="{{event.price}}" name="price" class="form-control">
   </div>
 
   <div class="form-group">
     <label>Category</label>
-    <input type="text" value="{{card.category}}" name="description" class="form-control">
+    <input type="text" value="{{event.category}}" name="category" class="form-control">
   </div>
 
   <div class="form-group">
-    <label>Open Time</label>
-    <input type="number" value="{{card.openTime}}" name="starttime" class="form-control">
+    <label>Event Starting Time</label>
+    <input type="time" value="{{event.eventStartTime}}" name="eventStartTime" class="form-control">
   </div>
 
   <div class="form-group">
-    <label>Closing Time</label>
-    <input type="number" value="{{card.closingTime}}" name="closetime" class="form-control">
+    <label>Event Closing Time</label>
+    <input type="time" value="{{event.eventEndTime}}" name="eventEndTime" class="form-control">
   </div>
 
   <div class="form-group">
-    <label>Closing Time</label>
-    <input type="number" value="{{card.closingTime}}" name="closetime" class="form-control">
+    <label>Location</label>
+    <input type="number" value="{{event.location}}" name="location" class="form-control">
   </div>
-
-    <div class="form-group">
-    <label>Closing Time</label>
-    <input type="number" value="{{card.closingTime}}" name="closetime" class="form-control">
-  </div>
-
-
 
   <div class="form-group">
-    <button class="btn btn-success">Save restaurant</button>
-    <a class="btn btn-danger" href="/restaurants">Delete restaurant</a>
-    <a class="btn btn-default" href="/restaurants">Cancel</a>
+     <label>Images For Events</label>
+     <input type="file" name="file" class="form-control">
   </div>
+
+  <div class="form-group">
+     <label>Event Video</label>
+     <input type="file" name="video" class="form-control">
+  </div>
+  <!--   <input type="submit" value="Send"> -->
+    <button type="submit" class="btn btn-default">Complete</button>
 </form>
-
-
-
-  // getReviews(), //review ids
-  virtual stars, from reviews array
-  latitude: Number,
-  longitude: Number,

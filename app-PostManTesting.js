@@ -64,6 +64,7 @@ router.post('/makeEvent', function(req, res){
   })
 })
 
+//put this one on get 'event' after you test and done it
 router.post('/getEvents', function(req, res) {
   console.log(req.query);
   var sort = req.query.sort;
@@ -83,6 +84,7 @@ router.post('/getEvents', function(req, res) {
     })
   })
 
+//put this one on get 'event/:eventId' after you test and done it
 router.get('/getEvents/:eventId', function(req, res){
   EventCard.findById(req.param._id).exec(function(err, eventCard){
     res.render(LAYOUT, Images: eventCard.image)
@@ -90,14 +92,15 @@ router.get('/getEvents/:eventId', function(req, res){
 })
 
 $('button .likeOrDislike').on('click', function(){
-  
+
   $.ajax({
     url: 'localhost3000/likes/:'
     method: 'post',
     success: function(req)
   })
 })
-//This should be AJAX
+
+//put this one on post 'notification' after you test and done it
 router.post('/makeConnection', function(req, res){
   //req.user?
   var myId = req.body.myId;
@@ -111,6 +114,9 @@ router.post('/makeConnection', function(req, res){
   })
 })
 
+//this is very similar to get notification, which show all notification for the owner
+//so he knows which person like his event, and he can approve it.
+//read more on my sections
 router.post('/isConnected', function(req, res){
   var myId = req.body.myId;
   var theirId = req.body.theirId;
