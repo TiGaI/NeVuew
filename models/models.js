@@ -55,17 +55,6 @@ var userSchema = new mongoose.Schema({
   }
 });
 
-var userConnectionSchema = new mongoose.Schema({
-  user1: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  },
-  user2: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  }
-})
-
 var eventSchema = new mongoose.Schema({
   title: {
     type: String,
