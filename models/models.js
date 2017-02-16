@@ -1,10 +1,4 @@
 var mongoose = require('mongoose');
-var findOrCreate = require('mongoose-findorcreate');
-var connect = process.env.MONGODB_URI || require('./connect');
-var express = require('express');
-// var userConnection = require('../userConnection')
-
-// mongoose.connect(connect);
 
 var userActionSchema = new mongoose.Schema({
   user: {
@@ -71,8 +65,8 @@ var eventSchema = new mongoose.Schema({
   category: String,
   price: Number,
   dateCreated: Date,
-  eventStartTime: Date,
-  eventEndTime: Date,
+  eventStartTime: String,
+  eventEndTime: String,
   location: String,
   image: Array,
   video: String,

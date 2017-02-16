@@ -7,7 +7,7 @@ var router = express.Router();
 
 //model
 var User  = require('../models/models').User;
-var Event  = require('../models/models').Event;
+var EventCard  = require('../models/models').EventCard;
 
 var s3 = new aws.S3();
 router.use(bodyParser.json());
@@ -20,8 +20,8 @@ var upload = multer({
     metadata: function (req, file, cb) {
       cb(null, {fieldName: file.fieldname});
     },
-    key: function (req, file, cb) {
-      console.log('key', file);
+    Key: function (req, file, cb) {
+      // console.log('key', file);
       cb(null, file.orginalname)
     }
   })
@@ -49,10 +49,19 @@ router.get('/event/:eventId', function(req, res){
 
 });
 
+//Get the form 
+router.get('/makeEvent', function(req, res){
+  res.render('eventCreate', {user: req.user});
+});
+
 /* Create event, can only be done by user. */
 router.post('/makeEvent', upload.fields([{name: 'file', maxCount: 4},
 	{ name: 'video', maxCount: 1}]), function(req, res){
-  var eventCard = new models.EventCard({
+    // console.log(req.files);
+    //  console.log("files " + req.files['file'][0]['location']);
+    // console.log("video " + req.files['video'][0]['location']);
+
+  var eventCard = new EventCard({
     title: req.body.title,
     owner: req.user._id,
     price: req.body.price,
@@ -61,8 +70,8 @@ router.post('/makeEvent', upload.fields([{name: 'file', maxCount: 4},
     eventStartTime: req.body.eventStartTime,
     eventEndTime: req.body.eventEndTime,
     location: req.body.location,
-    image: [req.files[file].location],
-    video: req.files[video].location,
+    image: req.files['file'][0]['location'],
+    video: req.files['video'][0]['location'],
     usersAttending: []
   })
   eventCard.save(function(err){
@@ -86,9 +95,27 @@ router.post('/likes/:eventid', function(req, res){
 //Owner notification for all usesr that like his event
 //Note: later on we will add a timer for the owner so he need to reply
 //fast, add to the spontenous factor
-router.get('/notifications', function(req, res){
+router.get('/notifications/:eventId', function(req, res){
+  EventCard.findById(eventId, function(err, event){
 
+    if (err) {
+      res.send(err)
+    } else {
+        if(req.user._id === event.owner){
+          res.render('notifications', {user: req.user,
+                                       event: event,
+                                       potentialuser: event.potentialAttendee
+                                      });
+        }else{
+          res.send('You have no access to this page')
+        }
+    }
 
+  
+
+  })
+  
+  
 });
 
 //Owner can decide whether or not he will accept/decline the person
