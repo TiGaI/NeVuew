@@ -44,6 +44,19 @@ router.post('/makeUser', function(req, res){
   res.send('User created')
 })
 
+router.post('/makeEvent', function(req, res){
+  var evenCard = new models.EventCard({
+    title: req.body.title,
+    owner: req.body.userId,
+    category: req.body.category,
+    dateCreated: new Date(),
+    eventStartTime: new Date(),
+    eventEndTime: new Date(),
+    location: req.body.location,
+    usersAttending: []
+  })
+})
+
 router.post('/makeConnection', function(req, res){
   //req.user?
   var myId = req.body.myId;

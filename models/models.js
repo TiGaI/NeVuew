@@ -77,7 +77,7 @@ var eventSchema = new mongoose.Schema({
     required: true
   },
   category: String,
-  dateCreated: String,
+  dateCreated: Date,
   eventStartTime: Date,
   eventEndTime: Date
   location: String,
