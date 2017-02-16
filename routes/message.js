@@ -20,7 +20,7 @@ router.get('/connections/:userId', function(req, res){
 		}else{
 
 			res.render('/message', {
-				connection: user.connections.user2
+				connection: user.connections.user2,
 				currentuser: user
 				})
 		}
@@ -74,7 +74,7 @@ router.post('/message/:userid', function(req, res){
 	  		res.redirect('/message/' + req.params.userid);		
 	  	})
 	  }
-	}
+	
 });
 
 // User can delete that connection with the other users

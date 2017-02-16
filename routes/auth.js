@@ -1,3 +1,4 @@
+"use strict";
 // Add Passport-related auth routes here.
 var express = require('express');
 var router = express.Router();
@@ -5,6 +6,23 @@ var models = require('../models/models');
 var fromPhone = process.env.FROM_PHONE;
 
 module.exports = function(passport) {
+
+
+  // GET Login page
+  router.get('/', function(req, res) {
+    res.render('login', {
+    error: req.query.error,
+    msg: req.query.msg
+    });
+  });
+
+  // POST Login page
+  router.post('/', passport.authenticate('local', {
+            successRedirect: '/event',
+            failureRedirect: '/login'
+        }), function(req, res) {
+    res.redirect('/event');
+  });
 
   // GET registration page
   router.get('/signup', function(req, res) {
@@ -17,6 +35,16 @@ module.exports = function(passport) {
   };
 
   router.post('/signup', function(req, res) {
+    var fields = ['lname', 'fname', 'email', 'password', 'passwordRepeat']
+    for (var i = 0; i < fields.length; i++) {
+      var field = fields[i];
+      if (! req.body[field]) {
+        res.status(400).render('signup', {
+          error: field + ' is required.'
+        });
+        return;
+      }
+    }
     // validation step
     if (!validateReq(req.body)) {
       return res.render('signup', {
@@ -24,31 +52,27 @@ module.exports = function(passport) {
       });
     }
     var u = new models.User({
-      username: req.body.username,
+      lname: req.body.lname,
+      fname: req.body.fname,
+      email: req.body.email,
       password: req.body.password,
-      phone: fromPhone
     });
     u.save(function(err, user) {
       if (err) {
-        console.log(err);
-        res.status(500).redirect('/register');
-        return;
-      }
+          if (err.errmsg.indexOf('E11000') > -1) {
+            err = 'email is already taken: ' + req.body.email;
+          } else {
+            err = err.errmsg;
+          }
+          res.status(400).render('signup', {
+            error: err
+          })
+      } 
       console.log(user);
       res.redirect('/login');
     });
   });
 
-  // GET Login page
-  router.get('/', function(req, res) {
-    res.render('login');
-  });
-
-
-  // POST Login page
-  router.post('/', passport.authenticate('local'), function(req, res) {
-    res.redirect('/event');
-  });
 
   // GET Logout page
   router.get('/logout', function(req, res) {
@@ -65,7 +89,7 @@ module.exports = function(passport) {
     passport.authenticate('facebook', { failureRedirect: '/login' }),
     function(req, res) {
       // Successful authentication, redirect home.
-      res.redirect('/contacts');
+      res.redirect('/event');
     });
 
     router.get('/auth/google',
@@ -75,7 +99,7 @@ module.exports = function(passport) {
       passport.authenticate('google', { failureRedirect: '/login' }),
       function(req, res) {
         // Successful authentication, redirect home.
-        res.redirect('/');
+        res.redirect('/event');
       });
 
   return router;

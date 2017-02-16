@@ -15,7 +15,7 @@ var compression = require('compression');
 var routes = require('./routes/index');
 var auth = require('./routes/auth');
 var message = require('./routes/message');
-var card = require('./routes/card');
+var event = require('./routes/event');
 var other = require('./routes/other');
 
 var app = express();
@@ -39,7 +39,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Passport stuff here
 var session = require('express-session');
-app.use(session({secret: 'NewVuew'}));
+app.use(session({secret: process.env.secret}));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -103,6 +103,9 @@ passport.use(new GoogleStrategy({
 
 app.use('/', auth(passport));
 app.use('/', routes);
+app.use('/', event);
+app.use('/', message);
+app.use('/', other);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
