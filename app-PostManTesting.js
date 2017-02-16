@@ -89,6 +89,15 @@ router.get('/getEvents/:eventId', function(req, res){
   })
 })
 
+$('button .likeOrDislike').on('click', function(){
+  
+  $.ajax({
+    url: 'localhost3000/likes/:'
+    method: 'post',
+    success: function(req)
+  })
+})
+//This should be AJAX
 router.post('/makeConnection', function(req, res){
   //req.user?
   var myId = req.body.myId;
