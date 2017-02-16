@@ -4,7 +4,6 @@ var express = require('express'),
     multer = require('multer'),
     multerS3 = require('multer-s3');
 var router = express.Router();
-router.use(express.static(path.join(__dirname, 'public')));
 
 //model
 var User  = require('../models/models').User;

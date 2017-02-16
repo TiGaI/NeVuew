@@ -39,7 +39,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Passport stuff here
 var session = require('express-session');
-app.use(session({secret: 'NewVuew'}));
+app.use(session({secret: process.env.secret}));
 app.use(passport.initialize());
 app.use(passport.session());
 
