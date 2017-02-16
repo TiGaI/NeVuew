@@ -103,6 +103,9 @@ passport.use(new GoogleStrategy({
 
 app.use('/', auth(passport));
 app.use('/', routes);
+app.use('/', event);
+app.use('/', message);
+app.use('/', other);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -17,7 +17,10 @@ module.exports = function(passport) {
   });
 
   // POST Login page
-  router.post('/', passport.authenticate('local'), function(req, res) {
+  router.post('/', passport.authenticate('local', {
+            successRedirect: '/event',
+            failureRedirect: '/login'
+        }), function(req, res) {
     res.redirect('/event');
   });
 
