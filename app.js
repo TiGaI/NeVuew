@@ -15,7 +15,7 @@ var compression = require('compression');
 var routes = require('./routes/index');
 var auth = require('./routes/auth');
 var message = require('./routes/message');
-var card = require('./routes/card');
+var event = require('./routes/event');
 var other = require('./routes/other');
 
 var app = express();

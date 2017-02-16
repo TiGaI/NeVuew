@@ -4,9 +4,28 @@ var express = require('express'),
     multer = require('multer'),
     multerS3 = require('multer-s3');
 var router = express.Router();
+router.use(express.static(path.join(__dirname, 'public')));
 
+//model
 var User  = require('../models/models').User;
 var Event  = require('../models/models').Event;
+
+var app = express()
+var s3 = new aws.S3();
+
+var upload = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: 'newvuew',
+    metadata: function (req, file, cb) {
+      cb(null, {fieldName: file.fieldname});
+    },
+    key: function (req, file, cb) {
+      console.log('key', file);
+      cb(null, file.orginalname)
+    }
+  })
+});
 
 // Require login past this point.
 router.use('/', function(req, res, next){
@@ -16,6 +35,7 @@ router.use('/', function(req, res, next){
     return next();
   }
 });
+
 /* GET event, tinder like view for random event that gear through the user. */
 router.get('/event', function(req, res){
 
@@ -30,8 +50,28 @@ router.get('/event/:id', function(req, res){
 });
 
 /* Create event, can only be done by user. */
-router.post('/makeEvent', function(req, res){
-
+router.post('/makeEvent', upload.fields([{name: 'file', maxCount: 4},
+	{ name: 'video', maxCount: 1}]), function(req, res){
+  var eventCard = new models.EventCard({
+    title: req.body.title,
+    owner: req.user._id,
+    price: req.body.price,
+    category: req.body.category,
+    dateCreated: new Date(),
+    eventStartTime: req.body.eventStartTime,
+    eventEndTime: req.body.eventEndTime,
+    location: req.body.location,
+    image: [req.files[file].location],
+    video: req.files[video].location,
+    usersAttending: []
+  })
+  eventCard.save(function(err){
+    if (err) {
+      res.send(err)
+    } else {
+      res.send('posted Event')
+    }
+  })
 
 });
 
