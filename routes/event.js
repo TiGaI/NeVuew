@@ -8,7 +8,14 @@ var router = express.Router();
 var User  = require('../models/models').User;
 var Event  = require('../models/models').Event;
 
-
+// Require login past this point.
+router.use('/', function(req, res, next){
+  if (!req.user) {
+    res.redirect('/');
+  } else {
+    return next();
+  }
+});
 /* GET event, tinder like view for random event that gear through the user. */
 router.get('/event', function(req, res){
 
@@ -18,6 +25,12 @@ router.get('/event', function(req, res){
 //accesss the more information on the event
 //note: this controller will be gone later once we incoorporate jquery
 router.get('/event/:id', function(req, res){
+
+
+});
+
+/* Create event, can only be done by user. */
+router.post('/makeEvent', function(req, res){
 
 
 });

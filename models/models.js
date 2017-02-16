@@ -82,6 +82,7 @@ var eventSchema = new mongoose.Schema({
 });
 
 var messageSchema = new mongoose.Schema({
+<<<<<<< HEAD
   body: {
     type: String,
     required: true
@@ -100,6 +101,7 @@ var messageSchema = new mongoose.Schema({
     type: Date,
     required: true
   }
+
 });
 
 //Add Schema Methods

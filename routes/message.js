@@ -9,84 +9,93 @@ var User  = require('../models/models').User;
 var Event  = require('../models/models').Event;
 var Message  = require('../models/models').Message;
 
-/* GET message page. */
-router.get('/connections', function(req, res){
+/* GET message page. search all the users connections and display*/
+router.get('/connections/:userId', function(req, res){
 
+	User.findById(req.params.userId, function(err, user){
 
+		if(err){
+			res.send('invalid userId')
+			res.redirect('/')
+		}else{
+
+			res.render('/message', {
+				connection: user.connections.user2
+				currentuser: user
+				})
+		}
+	});
 
 
 });
 
+// Get conversation between currentuser and that special connection user
 router.get('/message/:userid', function(req, res){
-
-
-
-
+	Message.find({ $or: [{user1: req.params.userid, user2: req.user._id}, 
+						 {user2: req.params.userid, user1: req.user._id}]})
+			.sort('dateCreated').exec(function(err, message){
+				if(err){
+					res.send('invalid Message, conversation does not exist')
+					res.redirect('/connections/req.user._id')
+				}else{
+					res.render('message', {
+						conversation: message
+					})
+				}
+			});
 });
 
+// $('#button').on('click', function(){
+// $.ajax({
+// 	url: "/message/" + req.quer,
+// 	success: function(data){
+// 	}
+// })
+// })
+// Post a new body to the conversation between currentuser and that special connection user
 router.post('/message/:userid', function(req, res){
 	  if (! req.body.body) {
 	    res.status(400).render('messenger', {
-	      user: req.user,
+	      user: req.user.content,
 	      error: "Post body is required."
 	    });
-	  } else if (! req.body.to) {
-	    res.status(400).render('messenger', {
-	      user: req.user,
-	      error: "To field is required."
-	    });
-	  } else {
-	   User.findOne({
-	      username: req.body.to
-	    }, function(err, toUser) {
-	      if (err) {
-	        res.status(400).render('stagemessenger', {
-	          user: req.user,
-	          error: err.errmsg
-	        });
-	      } else if (! toUser) {
-	        res.status(400).render('messenger', {
-	          user: req.user,
-	          error: "No such user: " + req.body.to
-	        });
-	      } else {
-	        var message = new models.Message({
-	          from: req.user._id,
-	          to: toUser._id,
-	          body: req.body.body
-	        });
-	        message.save(function(err) {
-	          if (err) {
-	            res.status(500).render('messenger', {
-	              user: req.user,
-	              error: err.errmsg,
-	            })
-	          } else {
-	            res.redirect('messenger?success=Sent!');
-	          }
-	        });
-	      }
-	    });
+	  }else {
+	  	var newMessage = {
+	  		user1: req.user._id,
+	  		user2: req.params.userId,
+	  		body: req.body.message,
+	  		dateCreated: new Date()
+	  	}
+	  	newMessage.save(function(err){
+	  		if(err){
+	  			res.send('invalid Message, conversation does not exist')
+				res.redirect('/connections/req.user._id')
+	  		}
+	  		res.redirect('/message/' + req.params.userid);		
+	  	})
 	  }
+	}
 });
 
-router.post('/delete/:userId', function(req, res) {
-  if (! req.params.messageId) {
-    res.status(400).render('messenger', {
+// User can delete that connection with the other users
+router.post('/connnection/delete/:userId', function(req, res) {
+  if (err) {
+    res.status(400).render('connnection', {
       user: req.user,
-      error: 'Message id missing'
+      error: 'user id missing'
     });
   } else {
-    Message.findByIdAndRemove(req.params.messageId, function(err) {
-      if (err) {
-        res.status(400).render('messenger', {
-          user: req.user,
-          error: err.errmsg
-        });
-      } else {
-        res.redirect('/exercise2/messenger?success=Deleted!');
-      }
-    });
+  	User.findById(req.user._id, function(err, user){
+  		user.connection = user.connections.filter(function(x){
+  			return x !== req.params.userid
+  		})
+  		user.save(function(err){
+  			if(err) {res.status(400).json({message: "Failure by user, cannot delete"})
+  		    }else{
+  		      redirect('/connections' + req.user._id)
+  		    }
+  		})
+  	})
   }
 });
 
