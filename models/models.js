@@ -88,16 +88,16 @@ var eventSchema = new mongoose.Schema({
 });
 
 var messageSchema = new mongoose.Schema({
-	body: {
+	  content: {
       type: String,
       required: true
     },
-    toUser: {
+    user1: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: 'User'
     },
-    fromUser: {
+    user2: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: 'User'

@@ -3,3 +3,4 @@ connect.js
 app-PostmanTesting.js
 userConnections.js
 node_modules
+env.sh
