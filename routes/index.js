@@ -10,7 +10,7 @@ var Event  = require('../models/models').Event;
 
 
 /* GET home page. */
-router.post('/', function(req, res){
+router.get('/', function(req, res){
 
 });
 
