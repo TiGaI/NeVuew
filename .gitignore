@@ -1,5 +1,9 @@
 .DS_Store
+<<<<<<< HEAD
 models/connect.js
+=======
+./models/connect.js
+>>>>>>> master
 app-PostManTesting.js
 userConnections.js
 node_modules
