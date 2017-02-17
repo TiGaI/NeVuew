@@ -19,13 +19,6 @@ var eventApi = require('./routes/event');
 var other = require('./routes/other');
 
 
-var mongoose = require('mongoose');
-var findOrCreate = require('mongoose-findorcreate');
-var connect = process.env.MONGODB_URI || require('./models/connect');
-// var userConnection = require('../userConnection')
-
-mongoose.connect(connect);
-
 var app = express();
 app.use(compression());
 // view engine setup
