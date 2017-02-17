@@ -63,9 +63,15 @@ router.get('/getEvents', function(req, res) {
   //accesss the more information on the event
   //note: this controller will be gone later once we incoorporate jquery
   router.get('/event/:eventId', function(req, res){
-    EventCard.findById(req.param._id).exec(function(err, eventCard){
-      res.render(LAYOUT, {Images: eventCard.image})
+    EventCard.findById(req.params.eventId).exec(function(err, eventCard){
+      User.findById(eventCard.owner, function(err, user){
+        res.render('event', {event: eventCard, ownerinfo: user})
+      })
     })
+  });
+
+  router.get('/makeEvent', function(req, res){
+    res.render('eventCreate');
   });
 
   /* Create event, can only be done by user. */

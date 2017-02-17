@@ -9,18 +9,12 @@ var User  = require('../models/models').User;
 var Event  = require('../models/models').Event;
 
 
-/* GET home page. */
-router.get('/', function(req, res){
-
-});
-
-router.get('/events', function(req,res){
-	res.render('event');
-});
-
 router.get('/profile', function(req,res){
+
+
 	res.render('profile');
 });
+
 router.get('/eventSwipe', function(req,res){
 	res.render('eventSwipe');
 });
