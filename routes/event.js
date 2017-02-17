@@ -119,18 +119,12 @@ router.get('/getEvents', function(req, res) {
     // console.log(req.params.eventid);
     // console.log((req.body.swipe === 'leftSwipe')? false:true)
     var eventId = req.params.eventid;
-    console.log('**********')
-    console.log(eventId);
 
     // console.log(eventId)
     EventCard.findOne({_id: eventId}).exec(function(err, eventCard){
       if (err) {
-        console.log('*******')
-        console.log(err)
-        console.log('*******')
         res.send(err)
       }
-      console.log(eventCard);
       var userAction = new UserAction({
         user: req.user._id,
         eventCard: eventCard,
@@ -143,26 +137,15 @@ router.get('/getEvents', function(req, res) {
           res.send('Saved User/UserAction')
         }
       });
-      console.log(userAction)
-      User.findById(eventCard.owner).exec(function(err, user){
-        if (err) {
-          console.log('there is a diferent error')
-          res.send(err)
-        }
-        console.log('************')
-        console.log(user)
-        console.log('*************')
-        if(userAction.likeOrDislike){
-          // console.log('liked')
-          console.log(user);
-          user.pendingConnections.push(req.user._id)
-          user.save(function(err){
-            if(err) {
-              res.send(err)
-            }
-          });
-        }
-      });
+      if(userAction.likeOrDislike){
+        // console.log('liked')
+        eventCard.pendingConnections.push(req.user._id)
+        eventCard.save(function(err){
+          if(err) {
+            res.send(err)
+          }
+        });
+      }
     });
     console.log('save UserAction');
   });

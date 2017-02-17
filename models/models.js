@@ -44,7 +44,8 @@ var userSchema = new mongoose.Schema({
   },
   rating: {
     type: Number
-}, {timestamps: true});
+}}, { timestamps: true }
+);
 
 var eventSchema = new mongoose.Schema({
   title: {
