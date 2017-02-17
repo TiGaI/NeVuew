@@ -1,0 +1,82 @@
+body{
+	background-color: #1DB375;
+	background-image: url(http://www.socwall.com/images/wallpapers/36490-1920x1200.jpg);
+	opacity: 1;
+}
+.row1{
+	margin-top: 50px;
+}
+.navbar-default{
+	border: 1px solid transparent;
+	background-color: #1DB375;
+}
+.maintitle{
+	text-align: center;
+	font-size: 35px;
+	color: white;
+	text-shadow: 2px 2px black;
+
+}
+.maincontainer{
+	height: 90vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.adventurecontainer{
+	height: 550px;
+	width: 100%;
+	background-color: white;
+	/*border: 1px solid transparent;*/
+	border-radius: 5px 5px 5px 5px;
+}
+.adventuretitle{
+	font-family: Raleway, sans-serif,
+	font-weight: lighter;
+	font-size: 14px;
+	text-align: left;
+	color: grey;
+	margin-top: 0px;
+}
+.adventuredate{
+	font-family: Raleway, sans-serif,
+	font-weight: lighter;
+	font-size: 14px;
+	text-align: left;
+	text-align: center;
+}
+.adventuretime{
+	font-family: Raleway, sans-serif,
+	font-weight: lighter;
+	font-size: 14px;
+	text-align: left;
+	text-align: center;
+}
+.adventuregoing{
+	font-family: Raleway, sans-serif,
+	font-weight: lighter;
+	font-size: 14px;
+	text-align: left;
+	text-align: center;
+}
+.adventurebottom{
+	padding: 10px;
+}
+.adventurefooter{
+	margin-top: 10px;
+}
+.profileimage{
+	width: 100px; 
+	height:100px; 
+	border-radius: 50%; 
+	margin-top: -50px;
+	border: 6px solid white;
+}
+.leftcontainer, .rightcontainer{
+	height: 500px;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+

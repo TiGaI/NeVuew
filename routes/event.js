@@ -37,8 +37,8 @@ router.use('/', function(req, res, next){
 });
 
 /* GET event, tinder like view for random event that gear through the user. */
-router.get('/event', function(req, res){
-
+router.get('/eventSwipe', function(req, res){
+  res.render('eventSwipe');
 
 });
 

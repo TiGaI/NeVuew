@@ -1,0 +1,94 @@
+body{
+  /*background: url("https://static.pexels.com/photos/9692/pexels-photo.jpeg") no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;;*/
+    background-color: #1DB375;
+    background-image: url('http://i.huffpost.com/gen/4047270/images/o-SKYDIVING-facebook.jpg');
+
+
+}
+button{
+  width: 90%;
+  height: 40px;
+  margin-left: 20px;
+  margin-right: 20px;
+  color: white;
+  font-weight: lighter;
+  background-color: #45A3EE;
+  border: 1px solid transparent;
+
+}
+input{
+  
+  height: 40px;
+  width: 90%;
+  margin-top: 10px;
+  margin-left: 20px;
+  border: transparent solid 1px;
+}
+.navbar-default{
+  background-color: transparent;
+  margin-bottom: 0px;
+  z-index: 1;
+  border: transparent;
+  color: white;
+  padding: 10px 20px 0px 0px;
+}
+.row1{
+  z-index: -1;
+}
+.nav.navbar-nav.navbar-right li a {
+    color: white;
+}
+button[name=loginbutton]{
+  font-size: 15px;
+  font-weight: lighter;
+  font-family: Raleway, sans-serif;
+  color: white;
+
+}
+.maincenter{
+  height: 300px;
+  color: white;
+}
+.centertext{
+  font-size: 100px;
+  font-family: Raleway, sans-serif;
+  text-align: center;
+  font-weight: normal;
+  letter-spacing: 1px;
+  /*text-shadow: 1px 1px 1px #000000;*/
+}
+.createaccount{
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background-color: #1C1815;
+  height: 100%;
+  opacity: 0.8;
+  z-index: -1;
+  margin-top: 10px;
+  padding: 30px;
+}
+.accountheader{
+  color: white;
+  z-index: 1;
+  font-weight: lighter;
+  font-size: 40px;
+  padding-left: 20px;
+}
+.accountmessage{
+  color: white;
+  font-weight: lighter;
+  font-size: 20px;
+  padding-left: 20px;
+}
+button[name=register], button[name=login]{
+  font-size: 18px;
+  font-weight: normal;
+  margin-top: 10px;
+}
+/*button[name=login]{
+  background-color: #1DB375;
+}*/
