@@ -1,6 +1,15 @@
 .DS_Store
-model/connect.js
+<<<<<<< HEAD
+models/connect.js
+=======
+<<<<<<< HEAD
+models/connect.js
+=======
+./models/connect.js
+>>>>>>> master
+>>>>>>> 31deb980408f7ec4acde6e03956290be34b8d20c
 app-PostManTesting.js
 userConnections.js
 node_modules
 env.sh
+button-test.html

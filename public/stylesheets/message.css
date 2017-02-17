@@ -1,0 +1,42 @@
+/*body{
+	background-color: #1DB375;
+
+}
+.container-fluid{
+	margin-left: -30px;
+	margin-right: -30px;
+}
+.profileleft, .profileright{
+	background-color: white;
+	height: 100vh;
+	padding: 0;
+}
+.profileright{
+	padding: 0px;
+	background-color: lightgrey;
+	margin-left: -30px;
+}
+.profilepicture{
+	border-radius: 50%;
+	height: 200px;
+	width: 200px;
+	margin: 0 auto;
+	margin-top: -100px;
+}
+.profileheader{
+	text-align: center;
+}
+p{
+	margin: 0px 30px 0px 20px;
+	text-align: justify;
+}
+h4{
+	text-align: center;
+	font-weight: normal;
+	font-size: 15px;
+}
+.chatContainer{
+	border: 1px solid black;
+	height: 50px;
+	width: 100%;
+}*/

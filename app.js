@@ -15,7 +15,7 @@ var compression = require('compression');
 var routes = require('./routes/index');
 var auth = require('./routes/auth');
 var message = require('./routes/message');
-var event = require('./routes/event');
+var eventApi = require('./routes/event');
 var other = require('./routes/other');
 
 var app = express();
@@ -23,7 +23,6 @@ app.use(compression());
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 
-app.set('view engine', 'hbs');
 var hbs = require('express-handlebars')({
   defaultLayout: 'layout',
   extname: '.hbs'
@@ -103,7 +102,7 @@ passport.use(new GoogleStrategy({
 
 app.use('/', auth(passport));
 app.use('/', routes);
-app.use('/', event);
+app.use('/', eventApi);
 app.use('/', message);
 app.use('/', other);
 
