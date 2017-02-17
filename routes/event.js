@@ -30,15 +30,25 @@ var upload = multer({
 });
 
 
+// Require login past this point.
+// router.use('/', function(req, res, next){
+//   if (!req.user) {
+//     res.redirect('/');
+//   } else {
+//     return next();
+//   }
+// });
+
+
 /* GET event, tinder like view for random event that gear through the user. */
 router.get('/getEvents', function(req, res) {
   // console.log(req.query);
   var sort = req.query.sort;
   //Will eventually implement AJAX
   var myId = req.user._id; //This would be req.user in practice
-  User.findById(myId).exec(function(err, user){
+  models.User.findById(myId).exec(function(err, user){
     user.findSeenEvents(function(err, events){
-      EventCard.find({_id: {"$nin": events}})
+      models.EventCard.find({_id: {"$nin": events}})
       .sort({sort: -1})
       .limit(10)
       .exec(
@@ -62,6 +72,7 @@ router.get('/getEvents', function(req, res) {
     })
   });
 
+
   router.get('/createEvent', function(req, res){
     res.render('eventCreate');
 });
@@ -70,35 +81,31 @@ router.get('/getEvents', function(req, res) {
 //note: this controller will be gone later once we incoorporate jquery
 
 
-/* Create event, can only be done by user. */
-router.post('/makeEvent', upload.fields([{name: 'file', maxCount: 4},
-	{ name: 'video', maxCount: 1}]), function(req, res){
-    console.log(req.files);
-    //  console.log("files " + req.files['file'][0]['location']);
-    // console.log("video " + req.files['video'][0]['location']);
+  /* Create event, can only be done by user. */
+  router.post('/makeEvent', upload.fields([{name: 'file', maxCount: 4},
+  { name: 'video', maxCount: 1}]), function(req, res){
+    var eventCard = new models.EventCard({
+      title: req.body.title,
+      owner: req.user._id,
+      price: req.body.price,
+      category: req.body.category,
+      dateCreated: new Date(),
+      eventStartTime: req.body.eventStartTime,
+      eventEndTime: req.body.eventEndTime,
+      location: req.body.location,
+      image: [req.files[file].location],
+      video: req.files[video].location,
+      usersAttending: []
+    })
+    eventCard.save(function(err){
+      if (err) {
+        res.send(err)
+      } else {
+        res.send('posted Event')
+      }
+    })
 
-  var eventCard = new EventCard({
-    title: req.body.title,
-    owner: req.user._id,
-    price: req.body.price,
-    category: req.body.category,
-    dateCreated: new Date(),
-    eventStartTime: req.body.eventStartTime,
-    eventEndTime: req.body.eventEndTime,
-    location: req.body.location,
-    image: req.files['file'][0]['location'],
-    video: req.files['video'][0]['location'],
-    usersAttending: []
-  })
-  eventCard.save(function(err){
-    if (err) {
-      res.send(err)
-    } else {
-      res.send('posted Event')
-    }
-  })
-});
-
+  });
 
   //when a user like the event, it send a post request and we save the date
   //into the userAction database. Store all of user action for like and dislike
@@ -109,16 +116,17 @@ router.post('/makeEvent', upload.fields([{name: 'file', maxCount: 4},
       eventCard: req.param.eventid,
       likeOrDislike: (req.body.swipe === 'leftSwipe')? false:true //req.body.swipe is defined in AJAX
     });
-    EventCard.findById(req.param.eventid).exec(function(err, eventCard){
+
+    models.EventCard.findById(req.param.eventid).exec(function(err, eventCard){
       if (err) {
         res.send(err)
       }
-      User.findById(event.owner).exec(function(err, user){
+      models.User.findById(event.owner).exec(function(err, user){
         if (err) {
           res.send(err)
         }
-        if (userAction.likeOrDislike){
-          user.potentialConnection.push(req.user._id);
+        if(userAction.likeOrDislike){
+          user.potentialConnection.push(req.user._id)
           user.save(function(err){
             if(err) {
               res.send(err)
@@ -190,6 +198,7 @@ router.post('/potentialConnection/:userId', function(req, res){
       if(err){
         res.send(err)
       }
+
     })
   })
   res.send('connection made')
@@ -203,4 +212,5 @@ router.use('/', function(req, res, next){
   }
 });
 
-module.exports = router;
+
+  module.exports = router;
