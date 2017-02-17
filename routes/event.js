@@ -117,7 +117,9 @@ router.get('/getEvents', function(req, res) {
             if(err) {
               res.send(err)
             }
-          })
+
+          });
+
         }
         userAction.save(function(err){
           if(err) {
@@ -129,6 +131,7 @@ router.get('/getEvents', function(req, res) {
         })
     })
   });
+
 
   //Owner notification for all usesr that like his event
   //Note: later on we will add a timer for the owner so he need to reply
@@ -165,7 +168,7 @@ router.get('/getEvents', function(req, res) {
         if(err){
           res.send(err)
         }
-      })
+      });
     })
     res.send('connection made')
   });

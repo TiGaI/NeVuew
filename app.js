@@ -42,6 +42,13 @@ var hbs = require('express-handlebars')({
 app.engine('hbs', hbs);
 app.set('view engine', 'hbs');
 
+var mongoose = require('mongoose');
+var findOrCreate = require('mongoose-findorcreate');
+var connect = process.env.MONGODB_URI || require('./models/connect');
+// var userConnection = require('../userConnection')
+
+mongoose.connect(connect);
+
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -71,11 +78,11 @@ passport.deserializeUser(function(id, done) {
 // passport strategy
 passport.use(new LocalStrategy(function(username, password, done) {
     // Find the user with the given username
-    console.log(username)
 
     models.User.findOne({ email: username }, function (err, user) {
       console.log(user)
       // if there's an error, finish trying to authenticate (auth failed)
+      console.log(user);
       if (err) {
         console.error(err);
         return done(err);

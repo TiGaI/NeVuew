@@ -18,7 +18,7 @@ module.exports = function(passport) {
 
   // POST Login page
   router.post('/', passport.authenticate('local', {
-            successRedirect: '/conversation',
+            successRedirect: '/eventSwipe',
             failureRedirect: '/login'
         }))
 
@@ -26,6 +26,11 @@ module.exports = function(passport) {
   router.get('/signup', function(req, res) {
     res.render('signup');
   });
+
+  router.post('/login', passport.authenticate('local', {
+            successRedirect: '/eventSwipe',
+            failureRedirect: '/'
+  }));
 
   // POST registration page
   var validateReq = function(userData) {
@@ -67,7 +72,7 @@ module.exports = function(passport) {
           })
       } 
       console.log(user);
-      res.redirect('/login');
+      res.redirect('/eventSwipe');
     });
   });
 
