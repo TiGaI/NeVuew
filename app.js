@@ -25,8 +25,13 @@ var connect = process.env.MONGODB_URI || require('./models/connect');
 
 mongoose.connect(connect);
 
+
 var app = express();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+
 app.use(compression());
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 
@@ -46,10 +51,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Passport stuff here
 var session = require('express-session');
-app.use(session({
+var sessionMiddleware = session({
   secret: process.env.secret,
   store: new MongoStore({ mongooseConnection: mongoose.connection })
-}));
+});
+app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -105,19 +111,49 @@ passport.use(new FacebookStrategy({
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://www.example.com/auth/google/callback"
+    callbackURL: "http://localhost:3000/auth/google/callback",
+    profileFields: ['id', 'displayName', 'name', 'photos']
   },
-  function(accessToken, refreshToken, profile, cb) {
-    User.findOrCreate({ googleId: profile.id }, function (err, user) {
-      return cb(err, user);
-    });
-  }
+  function(accessToken, refreshToken, profile, done) {
+        User.findOne({
+            '_id': profile.id 
+        }, function(err, user) {
+            if (err) {
+                return done(err);
+            }
+            if (!user) {
+                var fullName = profile.displayName.split(' ');
+                var firstName = fullName[0];
+                var lastName = fullName[fullName.length - 1];
+                user = new User({
+                    _id: profile.id,
+                    fname: firstName,
+                    lname: lastName,
+                    email: profile.emails[0].value, 
+                    image: profile.photos ? profile.photos[0].value : 'http://shurl.esy.es/y'         
+                });
+                user.save(function(err) {
+                    if (err) console.log(err);
+                    return done(err, user);
+                });
+            }else {
+                //found user. Return
+                return done(err, user);
+            }
+        });
+    }
 ));
+
+// socket io middleware
+io.use(function(socket, next) {
+  sessionMiddleware(socket.request, socket.request.res, next);
+});
+
 
 app.use('/', auth(passport));
 app.use('/', routes);
 app.use('/', event);
-app.use('/', message);
+app.use('/', message(io));
 app.use('/', other);
 
 // catch 404 and forward to error handler
@@ -145,6 +181,7 @@ app.use(function(err, req, res, next) {
   });
 });
 
-module.exports = app;
 
-app.listen("3000");
+http.listen(3000, function(){
+  console.log('listening on *:3000');
+});

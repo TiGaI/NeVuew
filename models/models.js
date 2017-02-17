@@ -24,8 +24,7 @@ var userSchema = new mongoose.Schema({
   },
   //Need to Hash Password
   password: {
-    type: String,
-    required: true
+    type: String
   },
   bio: {
     type: String,

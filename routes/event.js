@@ -37,8 +37,8 @@ router.use('/', function(req, res, next){
 });
 
 /* GET event, tinder like view for random event that gear through the user. */
-router.get('/event', function(req, res){
-
+router.get('/eventSwipe', function(req, res){
+  res.render('eventSwipe');
 
 });
 
@@ -57,7 +57,7 @@ router.get('/makeEvent', function(req, res){
 /* Create event, can only be done by user. */
 router.post('/makeEvent', upload.fields([{name: 'file', maxCount: 4},
 	{ name: 'video', maxCount: 1}]), function(req, res){
-    console.log(req.files);
+    // console.log(req.files);
     //  console.log("files " + req.files['file'][0]['location']);
     // console.log("video " + req.files['video'][0]['location']);
 
