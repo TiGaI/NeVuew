@@ -1,257 +1,4 @@
-<style type="text/css">
-  
-      body{
-        /*background: url("https://static.pexels.com/photos/9692/pexels-photo.jpeg") no-repeat center center fixed; 
-          -webkit-background-size: cover;
-          -moz-background-size: cover;
-          -o-background-size: cover;
-          background-size: cover;;*/
-          background-color: #1DB375;
-      }
-
-      #fblogin {
-          color: rgb(255, 255, 255);
-          cursor: pointer;
-          display: block;
-          float: left;
-          top: 40px;
-          left: 0px;
-          height: 50px;
-          position: absolute;
-          text-align: left;
-          text-decoration: none solid rgb(68, 68, 68);
-          text-shadow: rgb(255, 255, 255) 0px 1px 0px;
-          vertical-align: middle;
-          white-space: nowrap;
-          width: 290px;
-          background: rgba(0, 0, 0, 0) -webkit-linear-gradient(rgb(86, 120, 188), rgb(49, 74, 123)) repeat scroll 0% 0% / auto padding-box border-box;
-          background: rgba(0, 0, 0, 0) linear-gradient(rgb(86, 120, 188), rgb(49, 74, 123)) repeat scroll 0% 0% / auto padding-box border-box;
-          border-top: 1px solid rgb(49, 74, 123);
-          border-right: 1px solid rgb(42, 64, 105);
-          border-bottom: 1px solid rgb(42, 64, 105);
-          border-left: 1px solid rgb(42, 64, 105);
-          -moz-border-radius: 8px;
-          -webkit-border-radius: 8px;
-          border-radius: 8px;
-          font: normal normal 16px/normal 'Helvetica Neue';
-          font-size: 16px;
-          margin: 0px;
-          outline: rgb(68, 68, 68) none 0px;
-          overflow: hidden;
-          padding: 10px 18px;
-      }
-
-      #fbname {
-          background-position: 0px 0px;
-          bottom: 0px;
-          box-shadow: rgba(0, 0, 0, 0.0470588) 1px 0px 0px 0px;
-          color: rgb(255, 255, 255);
-          cursor: pointer;
-          display: block;
-          height: 48px;
-          left: 0px;
-          position: absolute;
-          text-align: center;
-          text-decoration: none solid rgb(68, 68, 68);
-          text-shadow: rgb(255, 255, 255) 0px 1px 0px;
-          top: 0px;
-          vertical-align: middle;
-          white-space: nowrap;
-          width: 50px;
-          align-self: flex-start;
-          background: rgba(255, 255, 255, 0.0784314) no-repeat scroll 0px 0px / auto padding-box border-box;
-          border: 0px none rgb(68, 68, 68);
-          font: normal normal 16px/normal 'Helvetica Neue', Helvetica;
-          outline: rgb(68, 68, 68) none 0px;
-      }
-
-      #fbtext {
-          color: rgb(255, 255, 255);
-          cursor: pointer;
-          display: inline-block;
-          height: 17px;
-          text-align: left;
-          text-decoration: none solid rgb(255, 255, 255);
-          text-shadow: rgba(0, 0, 0, 0.247059) 0px -1px 0px;
-          vertical-align: middle;
-          white-space: nowrap;
-          width: 150px;
-          align-self: flex-start;
-          border: 0px none rgb(255, 255, 255);
-          font: normal normal bold 16px/normal 'Helvetica Neue';
-          margin: -3px 0px 0px 42px;
-          outline: rgb(255, 255, 255) none 0px;
-      }
-
-      #gpluslogin {
-          color: rgb(255, 255, 255);
-          cursor: pointer;
-          display: block;
-          float: left;
-          top: 110px;
-          left: 0px;
-          height: 50px;
-          position: absolute;
-          text-align: left;
-          text-decoration: none solid rgb(68, 68, 68);
-          text-shadow: rgb(255, 255, 255) 0px 1px 0px;
-          vertical-align: middle;
-          white-space: nowrap;
-          width: 290px;
-          background-color: #DD4B39;
-          background: -webkit-linear-gradient(#DD4B39,#D14836);
-          background: linear-gradient(#DD4B39,#D14836);
-          border-top: 1px solid rgb(230, 88, 88);
-          border-right: 1px solid rgb(227, 66, 66);
-          border-bottom: 1px solid rgb(227, 66, 66);
-          border-left: 1px solid rgb(227, 66, 66);
-          -moz-border-radius: 8px;
-          -webkit-border-radius: 8px;
-          border-radius: 8px;
-          font: normal normal 16px/normal 'Helvetica Neue', Helvetica;
-          font-size: 16px;
-          margin: 0px;
-          outline: rgb(68, 68, 68) none 0px;
-          overflow: hidden;
-          padding: 10px 18px;
-      }
-
-      #gpname {
-          background-position: 0px 0px;
-          bottom: 0px;
-          box-shadow: rgba(0, 0, 0, 0.0470588) 1px 0px 0px 0px;
-          color: rgb(255, 255, 255);
-          cursor: pointer;
-          display: block;
-          height: 48px;
-          left: 0px;
-          position: absolute;
-          text-align: center;
-          text-decoration: none solid rgb(68, 68, 68);
-          text-shadow: rgb(255, 255, 255) 0px 1px 0px;
-          top: 0px;
-          vertical-align: middle;
-          white-space: nowrap;
-          width: 50px;
-          align-self: flex-start;
-          background: rgba(255, 255, 255, 0.0666667) no-repeat scroll -43px -44px / auto padding-box border-box;
-          border: 0px none rgb(68, 68, 68);
-          font: normal normal 16px/normal 'Helvetica Neue', Helvetica;
-          outline: rgb(68, 68, 68) none 0px;
-      }
-
-      #gptext {
-          color: rgb(255, 255, 255);
-          cursor: pointer;
-          display: inline-block;
-          height: 17px;
-          text-align: left;
-          text-decoration: none solid rgb(255, 255, 255);
-          text-shadow: rgba(0, 0, 0, 0.247059) 0px -1px 0px;
-          vertical-align: middle;
-          white-space: nowrap;
-          width: 133px;
-          align-self: flex-start;
-          border: 0px none rgb(255, 255, 255);
-          font: normal normal bold 16px/normal 'Helvetica Neue', Helvetica;
-          margin: -3px 0px 0px 42px;
-          outline: rgb(255, 255, 255) none 0px;
-      }
-      body{
-        /*background: url("https://static.pexels.com/photos/9692/pexels-photo.jpeg") no-repeat center center fixed; 
-          -webkit-background-size: cover;
-          -moz-background-size: cover;
-          -o-background-size: cover;
-          background-size: cover;;*/
-          background-color: #1DB375;
-
-
-      }
-      button{
-        width: 90%;
-        height: 40px;
-        margin-left: 20px;
-        margin-right: 20px;
-        color: white;
-        font-weight: lighter;
-        background-color: #45A3EE;
-        border: 1px solid transparent;
-        border-radius: 8px;
-
-      }
-      input{
-        
-        height: 40px;
-        width: 90%;
-        margin-top: 10px;
-        margin-left: 20px;
-        border: transparent solid 1px;
-        border-radius: 8px;
-      }
-      .navbar-default{
-        background-color: transparent;
-        margin-bottom: 0px;
-        z-index: 1;
-        border: transparent;
-        color: white;
-        padding: 10px 20px 0px 0px;
-      }
-      .row1{
-        z-index: -1;
-      }
-      .nav.navbar-nav.navbar-right li a {
-          color: white;
-      }
-      button[name=loginbutton]{
-        font-size: 15px;
-        font-weight: lighter;
-        font-family: Raleway, sans-serif;
-        color: white;
-
-      }
-      .maincenter{
-        height: 300px;
-        color: white;
-      }
-      .centertext{
-        font-size: 100px;
-        font-family: Raleway, sans-serif;
-        text-align: center;
-        font-weight: normal;
-        letter-spacing: 1px;
-        /*text-shadow: 1px 1px 1px #000000;*/
-      }
-      .createaccount{
-        border: 1px solid transparent;
-        border-radius: 10px;
-        background-color: #1C1815;
-        height: 100%;
-        opacity: 0.9;
-        z-index: -1;
-        margin-top: 10px;
-        padding: 30px;
-      }
-      .accountheader{
-        color: white;
-        z-index: 1;
-        font-weight: lighter;
-        font-size: 40px;
-        padding-left: 20px;
-      }
-      .accountmessage{
-        color: white;
-        font-weight: lighter;
-        font-size: 20px;
-        padding-left: 20px;
-      }
-      button[name=register]{
-        font-size: 18px;
-        font-weight: normal;
-        margin-top: 10px;
-        margin-bottom: 20px;
-      }
-</style>
-
+<!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
@@ -259,20 +6,21 @@
   <!-- CSS files for Bootstrap -->
 
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> 
- <link href="https://fonts.googleapis.com/css?family=Crete+Round|Raleway" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Crete+Round|Raleway" rel="stylesheet">
+  <link rel="stylesheet" href="/stylesheets/login.css">
 
-  <link rel="stylesheet" href="./public/css/test.css">
 </head>
 <body>
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <ul class="nav navbar-nav navbar-right">
-          <!-- <li><button name="aboutbutton"><a href="#">Sign Up</a></button></li> -->
-           <li><button name="loginbutton"><a href="#">Login</a></button></li>
-    </ul>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <ul class="nav navbar-nav navbar-right">
+        <!-- <li><button name="aboutbutton"><a href="#">Sign Up</a></button></li> -->
+        <li><button name="loginbutton"><a href="#">Login</a></button></li>
+      </ul>
+    </div>
+
   </div>
 </nav>
-
 <div class="container-fluid row1">
   <div class="maincenter">
     <div class="row">
@@ -280,80 +28,79 @@
         <h1 class="centertext">newvuew</h1>
       </div>
     </div>
-      <div class="row">
+    <div class="row row2">
       <div class="col-md-offset-4 col-md-4">
-        <div class="createaccount">
+        <div class="createaccount hide">
           <h1 class="accountheader">Create an Account</h1>
           <p class="accountmessage">Its free and always will be.</p>
-         
-          <form method="post" class="register-form"> 
-                  <div class="row">      
-                       <div class="col-md-4 col-sm-4 col-lg-4">
-                          <label>Email</label>
-                           <input type="text" name="username" class="form-control">  
-                       </div>            
-                  </div>
-                  <div class="row">
-                       <div class="col-md-4 col-sm-4 col-lg-4">
-                          <label>Password</label>
-                          <input type="password" name="password" class="form-control">            
-                       </div>            
-                  </div>
-                  <hr>
-                      <div class="row">
-                       <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
-                       <button type="submit" class="btn btn-default logbutton">Login</button>
-                      </div>     
-                      <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6"> 
-                      <a class="btn btn-default regbutton" href="/signup">Register</a>   
-                      </div>          
-                  </div> 
-            </form>
+          <input type="text" name="fname"  placeholder="First name"></input><br>
+          <input type="text" name="lname"  placeholder="Last name"></input><br>
+          <input type="text" name="email" placeholder="Username"></input><br>
+          <input type="password" name="password" placeholder="Password"></input><br>
+          <input type="text" name="passwordRepeat" placeholder="passwordRepeat"></input><br>
+          <button type="submit" name="register" >Register</button><br>
+          <!--           <button type="submit" name="login" >Login</button><br> -->
         </div>
-      </div>
+        <form method="POST" action="/login" >
+        <div class="loginform form-control">
+         <h1 class="accountheader">Login to your account</h1>
+         <input type="text" name="username" placeholder="Username"></input><br>
+         <input type="password" name="password" placeholder="Password"></input><br>
+         <button type="submit" name="login" >Login</button><br>
+         <button name="register" href="/signup" ><a class="btn btn-default regbutton" href="/signup">Register</a></button><br>
+
+         </form>
+         <div class="row hide">
+           <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+             <a href="/auth/facebook">
+              <button type="button" id="fblogin">
+                f&nbsp;&nbsp;&nbsp;<em id="fbname"></em> 
+                <span id="fbtext">Sign In with Facebook</span>
+              </button>
+            </a>
+          </div>
+          <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+          <a href="/auth/google">
+           <button type="button" id="gpluslogin">
+            g+<em id="gpname"></em> 
+            <span id="gptext">Sign In with Google</span>
+          </button>    
+        </a>     
+      </div> 
+        </div> 
+
+
+
     </div>
+  </div>
+</div>
+
+
+
     <!-- <div class="row">
       <div class="col-md-4">
         <img src="http://www.clker.com/cliparts/M/1/h/Y/9/P/mountain-peak.svg" style="width: 100%; height: 300px;">
       </div>
-      </div> -->
-
-                    <div class="row">
-                       <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
-                       <a href="/auth/facebook">
-                          <button type="button" id="fblogin">
-                            f&nbsp;&nbsp;&nbsp;<em id="fbname"></em> 
-                            <span id="fbtext">Sign In with Facebook</span>
-                          </button>
-                        </a>
-                      </div>
-         
-                  </div> 
-
-
-                      <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
-                        <a href="/auth/google">
-                       <button type="button" id="gpluslogin">
-                          g+<em id="gpname"></em> 
-                          <span id="gptext">Sign In with Google</span>
-                        </button>    
-                        </a>     
-                      </div> 
+    </div> -->
   </div>
 </div>
 
-  <script
-  src="https://code.jquery.com/jquery-3.1.1.min.js"
-  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
-  crossorigin="anonymous"></script>
+<script
+src="https://code.jquery.com/jquery-3.1.1.min.js"
+integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+crossorigin="anonymous"></script>
 
-  <!-- Your script file -->
-  <script type="text/javascript" src="./js/script.js"></script>
-  <!-- UnderscoreJS Library -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
 
-  <!-- JavaScript files for Bootstrap -->
-  <!-- UNCOMMENT IF NEEDED -->
-  <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> -->
+<!-- Your script file -->
+<script type="text/javascript" src="./js/script.js"></script>
+<!-- UnderscoreJS Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+
+<!-- JavaScript files for Bootstrap -->
+<!-- UNCOMMENT IF NEEDED -->
+<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> -->
 </body>
 </html>
+
+
+

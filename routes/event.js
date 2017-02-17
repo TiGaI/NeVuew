@@ -113,23 +113,22 @@ router.get('/getEvents', function(req, res) {
         }
         if(userAction.likeOrDislike){
           user.potentialConnection.push(req.user._id)
-          user.save(err){
+          user.save(function(err){
             if(err) {
               res.send(err)
             }
-          }
+          });
         }
-        userAction.save(err){
+        userAction.save(function(err){
           if(err) {
-            res.send(err){
-            } else {
+            res.send(err)
+             }else {
               res.send('Saved User/UserAction')
             }
-          }
-        }
+          });
+        });
       })
-    })
-  });
+    });
 
   //Owner notification for all usesr that like his event
   //Note: later on we will add a timer for the owner so he need to reply
@@ -155,18 +154,18 @@ router.get('/getEvents', function(req, res) {
     var user1 = req.user;
     var user2Id
     user1.connections.push(user2Id);
-    user1.save(err){
+    user1.save(function(err){
       if (err){
         res.send(err)
       }
-    }
+    });
     User.findById(user2Id).exec(function(err, user2){
       user2.connections.push(user1._id);
-      user2.save(err){
+      user2.save(function(err){
         if(err){
           res.send(err)
         }
-      }
+      });
     })
     res.send('connection made')
   });
