@@ -52,9 +52,7 @@ var userSchema = new mongoose.Schema({
   rating: {
     type: Number
   },
-  eventQueue : {
-    type: [EventCard]
-  }
+  pendingConnections: [mongoose.Schema.Types.ObjectId]
 }, {timestamps: true});
 
 var eventSchema = new mongoose.Schema({
@@ -134,8 +132,6 @@ userSchema.methods.findSeenEvents = function(callback){
 
 var Message = mongoose.model("Message", messageSchema);
 var User = mongoose.model("User", userSchema);
-// var UserConnection = mongoose.model("UserConnection", userConnectionSchema);
-// var PotentialConnection = mongoose.model("PotentialConnection", potentialConnectionSchema);
 var UserAction = mongoose.model("UserAction", userActionSchema);
 var EventCard = mongoose.model("EventCard", eventSchema)
 

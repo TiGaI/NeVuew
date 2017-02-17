@@ -52,54 +52,54 @@ router.get('/', function(req, res){
   res.redirect('button-test')
 })
 
-router.post('/makeUser', function(req, res){
-  console.log(req.body)
-  var user = new models.User({
-    fname: req.body.fname,
-    lname: req.body.lname,
-    password: req.body.password,
-    email: req.body.email
-    // What is admin used for
-  });
-  user.save(function(err){
-    if (err) {
-      res.send(err)
-    } else {
-      res.send('User created')
-    }
-  })
-});
-
-  router.post('/makeEvent', function(req, res){
-    var eventCard = new models.EventCard({
-      title: req.body.title,
-      owner: req.body.userId,
-      category: req.body.category,
-      dateCreated: new Date(),
-      eventStartTime: new Date(),
-      eventEndTime: new Date(),
-      location: req.body.location,
-      usersAttending: []
-    })
-    eventCard.save(function(err){
-      if (err) {
-        res.send(err)
-      } else {
-        res.send('posted Event')
-      }
-    })
-  })
+// router.post('/makeUser', function(req, res){
+//   console.log(req.body)
+//   var user = new models.User({
+//     fname: req.body.fname,
+//     lname: req.body.lname,
+//     password: req.body.password,
+//     email: req.body.email
+//     // What is admin used for
+//   });
+//   user.save(function(err){
+//     if (err) {
+//       res.send(err)
+//     } else {
+//       res.send('User created')
+//     }
+//   })
+// });
+//
+//   router.post('/makeEvent', function(req, res){
+//     var eventCard = new models.EventCard({
+//       title: req.body.title,
+//       owner: req.body.userId,
+//       category: req.body.category,
+//       dateCreated: new Date(),
+//       eventStartTime: new Date(),
+//       eventEndTime: new Date(),
+//       location: req.body.location,
+//       usersAttending: []
+//     })
+//     eventCard.save(function(err){
+//       if (err) {
+//         res.send(err)
+//       } else {
+//         res.send('posted Event')
+//       }
+//     })
+//   })
 
   //put this one on get 'event' after you test and done it
   router.get('/getEvents', function(req, res) {
     // console.log(req.query);
-
+    var sort = req.query.sort;
     //Will eventually implement AJAX
-    var myId = '58a3478dd88654106477a69e'; //This would be req.user in practice
+    var myId = req.user._id; //This would be req.user in practice
     models.User.findById(myId).exec(function(err, user){
       user.findSeenEvents(function(err, events){
         models.EventCard.find({_id: {"$nin": events}})
-        .sort(sort)
+        .sort({sort: -1})
         .limit(10)
         .exec(
           err, function(err, eventsQueue){
@@ -125,8 +125,8 @@ router.post('/makeUser', function(req, res){
     //put this one on post 'notification' after you test and done it
     router.post('/makeConnection', function(req, res){
       //req.user?
-      var myId = req.body.myId;
-      var theirId = req.body.theirId;
+      var myId = req.user._id;
+      var theirId = req.param.theirId;
 
       models.User.findById(myId).exec(function(err, user){
         console.log(user)
@@ -140,8 +140,8 @@ router.post('/makeUser', function(req, res){
     //so he knows which person like his event, and he can approve it.
     //read more on my sections
     router.post('/isConnected', function(req, res){
-      var myId = req.body.myId;
-      var theirId = req.body.theirId;
+      var myId = req.user._id;
+      var theirId = req.param.thierId;
       models.User.findById(myId).exec(function(err, user){
         user.isConnected(theirId, function(err, trueOrFalse){
           if (err) res.send(err)

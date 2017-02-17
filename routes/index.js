@@ -11,7 +11,7 @@ var Event  = require('../models/models').Event;
 
 /* GET home page. */
 router.get('/', function(req, res){
-  res.render('button-test');
+
 });
 
 

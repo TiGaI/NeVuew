@@ -36,41 +36,27 @@ $('.likeOrDislike').on('click', function(){
     method: 'post',
     data: data,
     success: function(res){
-      if (data.swipe === 'leftSwipe') {;
-        var userAction = new UserAction({
-          user: req.user._id,
-          eventCard: currentCard._id,
-          likeOrDislike: false
-        })
-        setNextCard();
-      } else {
-        var userAction = new UserAction({
-          user: req.user._id,
-          eventCard: currentCard._id,
-          likeOrDislike: true
-        })
-        setNextCard();
-      }
+      setNextCard();
     }
   });
 });
 
-  function setNextCard(){
-    if (array.length>0){
-      showCurrentCard();
-    }else{
-      getEvents();
-    }
-  }
-
-  function showCurrentCard(){
-    currentEvent = array.pop()
-    //TODO: show stuff onscreen
-  }
-
-  $( document ).ready(function() {
-    console.log('ey')
+function setNextCard(){
+  if (array.length>0){
+    showCurrentCard();
+  }else{
     getEvents();
-  });
+  }
+}
 
-  </script>
+function showCurrentCard(){
+  currentEvent = array.pop()
+  //TODO: show stuff onscreen
+}
+
+$( document ).ready(function() {
+  console.log('ey')
+  getEvents();
+});
+
+</script>
