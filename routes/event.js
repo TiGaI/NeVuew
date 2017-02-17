@@ -136,6 +136,13 @@ router.get('/getEvents', function(req, res) {
         eventCard: eventCard,
         likeOrDislike: (req.body.swipe === 'leftSwipe')? false:true //req.body.swipe is defined in AJAX
       });
+      userAction.save(function(err){
+        if(err) {
+          res.send(err)
+        } else {
+          res.send('Saved User/UserAction')
+        }
+      });
       console.log(userAction)
       User.findById(eventCard.owner).exec(function(err, user){
         if (err) {
@@ -158,13 +165,6 @@ router.get('/getEvents', function(req, res) {
       });
     });
     console.log('save UserAction');
-    userAction.save(function(err){
-      if(err) {
-        res.send(err)
-      } else {
-        res.send('Saved User/UserAction')
-      }
-    });
   });
 
 
