@@ -56,7 +56,7 @@ router.get('/getEvents', function(req, res) {
           if (err) {
             res.send(err)
           } else {
-            console.log(eventsQueue);
+            // console.log(eventsQueue);
             res.send(eventsQueue)
           } //Populate events deck on platform with a render in ajax/handlebars
         });
@@ -75,26 +75,31 @@ router.get('/getEvents', function(req, res) {
 
   router.get('/createEvent', function(req, res){
     res.render('eventCreate');
-});
+  });
 
-//accesss the more information on the event
-//note: this controller will be gone later once we incoorporate jquery
+  //accesss the more information on the event
+  //note: this controller will be gone later once we incoorporate jquery
+  router.get('/makeEvent', function(req, res){
+    res.render('eventCreate');
+  });
 
+  /* Create event, can only be done by user. */
 
   /* Create event, can only be done by user. */
   router.post('/makeEvent', upload.fields([{name: 'file', maxCount: 4},
   { name: 'video', maxCount: 1}]), function(req, res){
-    var eventCard = new models.EventCard({
+    // console.log(req.files['file'][0].location)
+    var eventCard = new EventCard({
       title: req.body.title,
       owner: req.user._id,
       price: req.body.price,
+      description: req.body.description,
       category: req.body.category,
-      dateCreated: new Date(),
       eventStartTime: req.body.eventStartTime,
       eventEndTime: req.body.eventEndTime,
-      location: req.body.location,
-      image: [req.files[file].location],
-      video: req.files[video].location,
+      image: req.files['file'][0].location,
+      video: req.files['video'][0].location,
+      location: req.body.locat,
       usersAttending: []
     })
     eventCard.save(function(err){
@@ -111,22 +116,39 @@ router.get('/getEvents', function(req, res) {
   //into the userAction database. Store all of user action for like and dislike
   //also send notification to the owner of the event if the user like it.
   router.post('/likes/:eventid', function(req, res){
-    var userAction = new UserAction({
-      user: req.user._id,
-      eventCard: req.param.eventid,
-      likeOrDislike: (req.body.swipe === 'leftSwipe')? false:true //req.body.swipe is defined in AJAX
-    });
+    // console.log(req.params.eventid);
+    // console.log((req.body.swipe === 'leftSwipe')? false:true)
+    var eventId = req.params.eventid;
+    console.log('**********')
+    console.log(eventId);
 
-    models.EventCard.findById(req.param.eventid).exec(function(err, eventCard){
+    // console.log(eventId)
+    EventCard.findOne({_id: eventId}).exec(function(err, eventCard){
       if (err) {
+        console.log('*******')
+        console.log(err)
+        console.log('*******')
         res.send(err)
       }
-      models.User.findById(event.owner).exec(function(err, user){
+      console.log(eventCard);
+      var userAction = new UserAction({
+        user: req.user._id,
+        eventCard: eventCard,
+        likeOrDislike: (req.body.swipe === 'leftSwipe')? false:true //req.body.swipe is defined in AJAX
+      });
+      console.log(userAction)
+      User.findById(eventCard.owner).exec(function(err, user){
         if (err) {
+          console.log('there is a diferent error')
           res.send(err)
         }
+        console.log('************')
+        console.log(user)
+        console.log('*************')
         if(userAction.likeOrDislike){
-          user.potentialConnection.push(req.user._id)
+          // console.log('liked')
+          console.log(user);
+          user.pendingConnections.push(req.user._id)
           user.save(function(err){
             if(err) {
               res.send(err)
@@ -134,14 +156,15 @@ router.get('/getEvents', function(req, res) {
           });
         }
       });
-      userAction.save(function(err){
-        if(err) {
-          res.send(err)
-        } else {
-          res.send('Saved User/UserAction')
-        }
-      });
-    })
+    });
+    console.log('save UserAction');
+    userAction.save(function(err){
+      if(err) {
+        res.send(err)
+      } else {
+        res.send('Saved User/UserAction')
+      }
+    });
   });
 
 
@@ -154,14 +177,14 @@ router.get('/notifications/:eventId', function(req, res){
     if (err) {
       res.send(err)
     } else {
-        if(req.user._id === event.owner){
-          res.render('notifications', {user: req.user,
-                                       event: event,
-                                       potentialuser: event.potentialAttendee
-                                      });
-        }else{
-          res.send('You have no access to this page')
-        }
+      if(req.user._id === event.owner){
+        res.render('notifications', {user: req.user,
+          event: event,
+          potentialuser: event.potentialAttendee
+        });
+      }else{
+        res.send('You have no access to this page')
+      }
     }
 
 
@@ -213,4 +236,4 @@ router.use('/', function(req, res, next){
 });
 
 
-  module.exports = router;
+module.exports = router;

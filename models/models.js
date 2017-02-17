@@ -34,7 +34,7 @@ var userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  image: String,
+  image: [String],
   videos: [String],
   activeEvents: [mongoose.Schema.Types.ObjectId],
   connections: [mongoose.Schema.Types.ObjectId],
@@ -63,12 +63,12 @@ var eventSchema = new mongoose.Schema({
     required: true
   },
   category: String,
+  eventStartTime: String,
+  eventEndTime: String,
   price: {
     type: Number,
     required: String
   },
-  eventStartTime: Date,
-  eventEndTime: Date,
   location: String,
   image: {
     picture1: String,
@@ -103,6 +103,7 @@ var messageSchema = new mongoose.Schema({
   }
 
 });
+
 
 //Add Schema Methods
 

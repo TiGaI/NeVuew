@@ -28,9 +28,20 @@ module.exports = function(passport) {
     res.render('signup');
   });
 
+  router.post('/signup', function(req, res) {
+    var user = new models.User({
+      fname: req.body.fname,
+      lname: req.body.lname,
+      password: req.body.password,
+      email: req.body.email
+    })
+    user.save();
+    res.render('login');
+  });
+
   router.post('/login', passport.authenticate('local'), function(req, res){
     models.User.findById(req.user._id).exec(function(err, user){
-      console.log('2')
+      // console.log('2')
       user.findSeenEvents(function(err, events){
         models.EventCard.find({_id:{"$nin": events}})
         .sort({eventStartTime: -1})
@@ -39,12 +50,13 @@ module.exports = function(passport) {
           err, function(err, eventsQueue){
             if (err){
               res.send(err)
-            } 
-            console.log(eventsQueue)
+            }
+            // console.log(eventsQueue)
+            // console.log(eventsQueue);
             res.render('eventSwipe', {eventsQueue: eventsQueue})
           })
       })
-    })        
+    })
   });
 
   // POST registration page
@@ -71,17 +83,17 @@ module.exports = function(passport) {
         error: "Passwords don't match."
       });
     }
-    console.log(req.body);
+    // console.log(req.body);
     var u = new models.User({
       fname: req.body.fname,
       lname: req.body.lname,
       email: req.body.email,
       password: req.body.password,
     });
-    console.log('u')
+    // console.log('u')
     u.save(function(err) {
       if (err) {
-        console.log('in err')
+        // console.log('in err')
           if (err.errmsg.indexOf('E11000') > -1) {
             err = 'email is already taken: ' + req.body.email;
           } else {
@@ -90,13 +102,9 @@ module.exports = function(passport) {
           res.status(400).render('signup', {
             error: err
           })
-<<<<<<< HEAD
       }
-=======
-      } 
-      console.log(user);
+      // console.log(user);
       res.redirect('/eventSwipe');
->>>>>>> eric
     });
       res.redirect('/eventSwipe');
   });
@@ -123,7 +131,7 @@ module.exports = function(passport) {
     function(req, res) {
       // Successful authentication, redirect home.
           models.User.findById(req.user._id).exec(function(err, user){
-      console.log('2')
+      // console.log('2')
       user.findSeenEvents(function(err, events){
         models.EventCard.find({_id:{"$nin": events}})
         .sort({eventStartTime: -1})
@@ -132,12 +140,12 @@ module.exports = function(passport) {
           err, function(err, eventsQueue){
             if (err){
               res.send(err)
-            } 
-            console.log(eventsQueue)
+            }
+            // console.log(eventsQueue)
             res.render('eventSwipe', {eventsQueue: eventsQueue})
           })
       })
-    }) 
+    })
   });
 
     router.get('/auth/google',
@@ -148,7 +156,7 @@ module.exports = function(passport) {
       function(req, res) {
         // Successful authentication, redirect home.
             models.User.findById(req.user._id).exec(function(err, user){
-      console.log('2')
+      // console.log('2')
       user.findSeenEvents(function(err, events){
         models.EventCard.find({_id:{"$nin": events}})
         .sort({eventStartTime: -1})
@@ -157,12 +165,12 @@ module.exports = function(passport) {
           err, function(err, eventsQueue){
             if (err){
               res.send(err)
-            } 
-            console.log(eventsQueue)
+            }
+            // console.log(eventsQueue)
             res.render('eventSwipe', {eventsQueue: eventsQueue})
           })
       })
-    }) 
+    })
       });
 
   return router;

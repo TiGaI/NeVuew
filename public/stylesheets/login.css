@@ -1,5 +1,5 @@
 body{
-  /*background: url("https://static.pexels.com/photos/9692/pexels-photo.jpeg") no-repeat center center fixed; 
+  /*background: url("https://static.pexels.com/photos/9692/pexels-photo.jpeg") no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -21,7 +21,7 @@ button{
 
 }
 input{
-  
+
   height: 40px;
   width: 90%;
   margin-top: 10px;
@@ -101,4 +101,8 @@ button[name=register], button[name=login]{
 }
 button[name=login]{
   background-color: #1DB375;
+}
+button[id=fblogin]{
+  background-color: #3B5998;
+  margin-top: 10px;
 }

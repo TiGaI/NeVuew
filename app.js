@@ -179,7 +179,7 @@ io.use(function(socket, next) {
 
 app.use('/', auth(passport));
 app.use('/', routes);
-app.use('/', event);
+app.use('/', eventApi);
 app.use('/', message(io));
 app.use('/', other);
 

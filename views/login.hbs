@@ -5,7 +5,7 @@
   <title>Nuevuew</title>
   <!-- CSS files for Bootstrap -->
 
-  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> 
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <link href="https://fonts.googleapis.com/css?family=Crete+Round|Raleway" rel="stylesheet">
   <link rel="stylesheet" href="/stylesheets/login.css">
 
@@ -13,10 +13,10 @@
 <body>
   <nav class="navbar navbar-default">
     <div class="container-fluid">
-      <ul class="nav navbar-nav navbar-right">
-        <!-- <li><button name="aboutbutton"><a href="#">Sign Up</a></button></li> -->
+    <!--   <ul class="nav navbar-nav navbar-right">
+        <li><button name="aboutbutton"><a href="#">Sign Up</a></button></li>
         <li><button name="loginbutton"><a href="#">Login</a></button></li>
-      </ul>
+      </ul> -->
     </div>
 
   </div>
@@ -33,12 +33,14 @@
         <div class="createaccount hide">
           <h1 class="accountheader">Create an Account</h1>
           <p class="accountmessage">Its free and always will be.</p>
-          <input type="text" name="fname"  placeholder="First name"></input><br>
-          <input type="text" name="lname"  placeholder="Last name"></input><br>
-          <input type="text" name="email" placeholder="Username"></input><br>
-          <input type="password" name="password" placeholder="Password"></input><br>
-          <input type="text" name="passwordRepeat" placeholder="passwordRepeat"></input><br>
-          <button type="submit" name="register" >Register</button><br>
+          <form method = "POST" action= "/signup">
+            <input type="text" name="fname"  placeholder="First name"></input><br>
+            <input type="text" name="lname"  placeholder="Last name"></input><br>
+            <input type="text" name="email" placeholder="Username"></input><br>
+            <input type="password" name="password" placeholder="Password"></input><br>
+            <input type="text" name="passwordRepeat" placeholder="passwordRepeat"></input><br>
+            <button type="submit" name="registe`r" >Register</button><br>
+          </form>
           <!--           <button type="submit" name="login" >Login</button><br> -->
         </div>
         <form method="POST" action="/login" >
@@ -51,23 +53,23 @@
 
          </form>
          <div class="row">
-           <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+           <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
              <a href="/auth/facebook">
               <button type="button" id="fblogin">
-                f&nbsp;&nbsp;&nbsp;<em id="fbname"></em> 
+                f&nbsp;&nbsp;&nbsp;<em id="fbname"></em>
                 <span id="fbtext">Sign In with Facebook</span>
               </button>
             </a>
           </div>
-          <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+        <!--   <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
           <a href="/auth/google">
            <button type="button" id="gpluslogin">
-            g+<em id="gpname"></em> 
+            g+<em id="gpname"></em>
             <span id="gptext">Sign In with Google</span>
-          </button>    
-        </a>     
-      </div> 
-        </div> 
+          </button>
+        </a>
+      </div> -->
+        </div>
 
 
 
@@ -91,8 +93,7 @@ integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
 crossorigin="anonymous"></script>
 
 
-<!-- Your script file -->
-<script type="text/javascript" src="./js/script.js"></script>
+
 <!-- UnderscoreJS Library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
 
@@ -101,6 +102,3 @@ crossorigin="anonymous"></script>
 <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> -->
 </body>
 </html>
-
-
-
