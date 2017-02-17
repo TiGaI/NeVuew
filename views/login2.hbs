@@ -17,9 +17,10 @@
           <!-- <li><button name="aboutbutton"><a href="#">Sign Up</a></button></li> -->
            <li><button name="loginbutton"><a href="#">Login</a></button></li>
     </ul>
+</div>
+
   </div>
 </nav>
-
 <div class="container-fluid row1">
   <div class="maincenter">
     <div class="row">
@@ -39,6 +40,11 @@
           <button type="submit" name="register" >Register</button><br>
 <!--           <button type="submit" name="login" >Login</button><br> -->
         </div>
+        <div class="loginform hide">
+         <h1 class="accountheader">Login to your account</h1>
+        <input type="text" name="email" placeholder="Username"></input><br>
+        <input type="password" name="password" placeholder="Password"></input><br>
+        </div>
       </div>
     </div>
     <!-- <div class="row">
@@ -55,8 +61,9 @@
   crossorigin="anonymous"></script>
     <script>
 
-    $("button[name=register]").click(function(){
-        $("button[name=loginbutton]").hide();
+    $("button[name=loginbutton]").click(function(){
+        $(".createaccount").hide();
+        $(".loginform").removeClass('hide');
     });
     </script>
 
