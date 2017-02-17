@@ -77,17 +77,18 @@ router.get('/getEvents', function(req, res) {
   /* Create event, can only be done by user. */
   router.post('/makeEvent', upload.fields([{name: 'file', maxCount: 4},
   { name: 'video', maxCount: 1}]), function(req, res){
-    var eventCard = new models.EventCard({
+    // console.log(req.files['file'][0].location)
+    var eventCard = new EventCard({
       title: req.body.title,
       owner: req.user._id,
       price: req.body.price,
+      description: req.body.description,
       category: req.body.category,
-      dateCreated: new Date(),
       eventStartTime: req.body.eventStartTime,
       eventEndTime: req.body.eventEndTime,
-      location: req.body.location,
-      image: [req.files[file].location],
-      video: req.files[video].location,
+      image: req.files['file'][0].location,
+      video: req.files['video'][0].location,
+      location: req.body.locat,
       usersAttending: []
     })
     eventCard.save(function(err){
