@@ -27,14 +27,14 @@ var upload = multer({
   })
 });
 
-// Require login past this point.
-// router.use('/', function(req, res, next){
-//   if (!req.user) {
-//     res.redirect('/');
-//   } else {
-//     return next();
-//   }
-// });
+Require login past this point.
+router.use('/', function(req, res, next){
+  if (!req.user) {
+    res.redirect('/');
+  } else {
+    return next();
+  }
+});
 
 /* GET event, tinder like view for random event that gear through the user. */
 router.get('/getEvents', function(req, res) {
@@ -63,10 +63,14 @@ router.get('/getEvents', function(req, res) {
   //accesss the more information on the event
   //note: this controller will be gone later once we incoorporate jquery
   router.get('/event/:eventId', function(req, res){
-    EventCard.findById(req.params.eventId).exec(function(err, eventCard){
-      User.findById(eventCard.owner, function(err, user){
-        res.render('event', {event: eventCard, ownerinfo: user})
-      })
+    EventCard.findById(req.params.eventId, function(err, eventCard){
+      console.log(eventCard.image[0])
+      if(eventCard){
+        User.findById(eventCard.owner, function(err, user){
+          console.log(user)
+         res.render('event', {event: eventCard, ownerinfo: user, image: eventCard.image[0]})
+        })
+      }
     })
   });
 
@@ -86,7 +90,7 @@ router.get('/getEvents', function(req, res) {
       category: req.body.category,
       eventStartTime: req.body.eventStartTime,
       eventEndTime: req.body.eventEndTime,
-      image: req.files['file'][0].location,
+      image: [req.files['file'][0].location],
       video: req.files['video'][0].location,
       location: req.body.locat,
       usersAttending: []
@@ -136,16 +140,38 @@ router.get('/getEvents', function(req, res) {
             }
           })
         })
-    })
+     })
   });
-
 
   //Owner notification for all usesr that like his event
   //Note: later on we will add a timer for the owner so he need to reply
   //fast, add to the spontenous factor
-  router.get('/potentialConnection', function(req, res){
-    res.send(req.user.potentialConnections);
+  router.get('/potentialConnection/:userid', function(req, res){
+    EventCard.find({owner: req.params.userid}).populate('pendingConnections').sort('-createdAt').exec(function(err, eventsByUser){ 
+      res.render("notification", {potentialUser: eventsByUser, user: eventsByUser.pendingConnections})
+    });
+  });
 
+  router.post('/approve/:userid/:eventid', function(req, res){
+    User.findById(req.param.userid).exec(function(err, user){
+      if (err) {
+        res.send(err)
+      }
+        user.connection.push(req.user._id);
+        User.save();
+     });
+    console.log("I am here in the user approve routes");
+    Event.findById(req.param.eventid).exec(function(err, event){
+      if (err) {
+        res.send(err)
+      }
+        event.usersAttending.push(req.user._id);
+        event.pendingConnections.filter(function(x){
+          return x !== req.param.userid
+        });
+        event.save();
+     });
+    console.log("Finish in the user approve routes");
   });
 
   //Owner can decide whether or not he will accept/decline the person

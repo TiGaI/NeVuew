@@ -11,7 +11,8 @@
 <div class="container eventRow1">
   <div class="header">
     <div class="col-md-4">
-      <h2 class="eventsHeader";">LOCATION</h2>
+      <h2 class="eventsHeader">LOCATION</h2>
+      <p>{{event.location}}</p>
     </div>
     <div class="col-md-4">
       <h1 class=headerName>LOS ANGELES</h1>
@@ -24,44 +25,46 @@
     <div class="row">
       <div class="col-md-12">
         <div id="videocontainer">
-          <video id="coverVid" poster="Book2.jpg" autoplay="true" loop="true" muted="true">
-
+          <!-- <video id="coverVid" poster="Book2.jpg" autoplay="true" loop="true" muted="true">
             <source src="gopro.mp4" type="video/mp4">
-         </video>
+         </video> -->
+         <img src="{{event.video}}">
+
         </div>
         </div>
     </div>
     <div class="row2">
       <div class="col-md-6 nopadding">
-        <div class="eventR2Col1">
-          <h2 class="eventDetails">Profile Picture</h2><br>
+        <div class="eventR2Col1" style="overflow: hidden;">
+          <img src="{{image}}" style="width:100%;">
         </div>
       </div>
       <div class="col-md-3 nopadding">
         <div class="eventR2Col2">
-          <h2 class="eventDetails">People Going: {{going}}</h2>
+          <h2 class="eventDetails">People Going: {{event.usersAttending.length}}</h2>
         </div>
       </div>
       <div class="col-md-3 nopadding">
         <div class="eventR2Col3">
-          <h2 class="eventDetails">Event Time {{time}}</h2>
+          <h2 class="eventDetails">Start Time {{event.eventStartTime}}</h2>
+          <!-- <h2 class="eventDetails">End Time {{event.eventEndTime}}</h2> -->
         </div>
       </div>
     </div>
     <div class="row3">
       <div class="col-md-3 nopadding">
         <div class="eventR3Col1">
-          <h2 class="eventDetails">Event Description {{event}}</h2>
+          <h2 class="eventDetails">Event Description {{event.description}}</h2>
         </div>
       </div>
       <div class="col-md-3 nopadding">
         <div class="eventR3Col2">
-          <h2 class="eventDetails">Users Going {{going}}</h2>
+          <h2 class="eventDetails">Price: $ {{event.price}}</h2>
         </div>
       </div>
       <div class="col-md-6 nopadding">
         <div class="eventR3Col3">
-          <h2 class="eventDetails">Location: {{location}}</h2>
+          <h2 class="eventDetails">Location: {{event.location}}</h2>
         </div>
       </div>
     </div>
@@ -73,8 +76,6 @@
   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
   crossorigin="anonymous"></script>
 
-  <!-- Your script file -->
-  <script type="text/javascript" src="./js/script.js"></script>
   <!-- UnderscoreJS Library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
 

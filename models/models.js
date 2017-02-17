@@ -34,19 +34,18 @@ var userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  image: String,
+  image: [String],
   videos: [String],
-  activeEvents: [mongoose.Schema.Types.ObjectId],
-  connections: [mongoose.Schema.Types.ObjectId],
+  activeEvents: [{type: mongoose.Schema.Types.ObjectId, ref: 'EventCard'}],
+  connections: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
   admin: {
     type: Boolean,
     default: false
   },
   rating: {
     type: Number
-  },
-  pendingConnections: [mongoose.Schema.Types.ObjectId]
-}, {timestamps: true});
+}}, { timestamps: true }
+);
 
 var eventSchema = new mongoose.Schema({
   title: {
@@ -76,10 +75,11 @@ var eventSchema = new mongoose.Schema({
     picture3: String
   },
   video: String,
-  usersAttending: [mongoose.Schema.Types.ObjectId],
+  usersAttending: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
   // category: String
   likes: [],
-  dislike:[]
+  dislike:[],
+  pendingConnections: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
 }, {timestamps: true});
 
 var messageSchema = new mongoose.Schema({
@@ -103,6 +103,7 @@ var messageSchema = new mongoose.Schema({
   }
 
 });
+
 
 //Add Schema Methods
 
