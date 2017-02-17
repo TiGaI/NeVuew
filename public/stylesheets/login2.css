@@ -28,6 +28,7 @@ input{
   margin-left: 20px;
   border: transparent solid 1px;
 }
+
 .navbar-default{
   background-color: transparent;
   margin-bottom: 0px;
@@ -70,6 +71,15 @@ button[name=loginbutton]{
   z-index: -1;
   margin-top: 10px;
   padding: 30px;
+}
+.loginform{
+  background-color: #1C1815;
+  height: auto;
+  padding: 30px;
+  border-radius: 10px;
+  margin-top: 10px;
+  opacity: 0.8;
+
 }
 .accountheader{
   color: white;

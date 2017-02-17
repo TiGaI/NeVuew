@@ -1,6 +1,9 @@
 body{
 	background-color: #1DB375;
-	background-image: url(http://www.socwall.com/images/wallpapers/36490-1920x1200.jpg);
+	background-image: url(http://www.destinationsrilankatours.com/wp-content/uploads/2015/03/rafting.jpg);
+	background-size:     cover;                      /* <------ */
+    background-repeat:   no-repeat;
+    background-position: center center; 
 	opacity: 1;
 }
 .row1{
@@ -24,10 +27,10 @@ body{
 	align-items: center;
 }
 .adventurecontainer{
-	height: 550px;
+	height: 600px;
 	width: 100%;
 	background-color: white;
-	/*border: 1px solid transparent;*/
+	border: 1px solid transparent;
 	border-radius: 5px 5px 5px 5px;
 }
 .adventuretitle{
@@ -79,4 +82,6 @@ body{
 	justify-content: center;
 	align-items: center;
 }
-
+button[name=like],button[name=dislike]{
+	width: 100%;
+}

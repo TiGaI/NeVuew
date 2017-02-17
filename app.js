@@ -15,7 +15,7 @@ var compression = require('compression');
 var routes = require('./routes/index');
 var auth = require('./routes/auth');
 var message = require('./routes/message');
-var event = require('./routes/event');
+var eventApi = require('./routes/event');
 var other = require('./routes/other');
 
 var mongoose = require('mongoose');
@@ -35,7 +35,6 @@ app.use(compression());
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 
-app.set('view engine', 'hbs');
 var hbs = require('express-handlebars')({
   defaultLayout: 'layout',
   extname: '.hbs'

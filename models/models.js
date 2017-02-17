@@ -10,7 +10,7 @@ var userActionSchema = new mongoose.Schema({
     ref: 'EventCard'
   },
   likeOrDislike: Boolean // true refers to like, false refers to dislike.
-})
+}, {timestamps: true})
 
 var userSchema = new mongoose.Schema({
   //How can we keep track of User Activity?
@@ -30,7 +30,6 @@ var userSchema = new mongoose.Schema({
     type: String,
     default: ""
   },
-  created: Date,
   email: {
     type: String,
     required: true
@@ -46,10 +45,8 @@ var userSchema = new mongoose.Schema({
   rating: {
     type: Number
   },
-  eventQueue : {
-    type: [EventCard]
-  }
-});
+  pendingConnections: [mongoose.Schema.Types.ObjectId]
+}, {timestamps: true});
 
 var eventSchema = new mongoose.Schema({
   title: {
@@ -67,13 +64,17 @@ var eventSchema = new mongoose.Schema({
   eventStartTime: String,
   eventEndTime: String,
   location: String,
-  image: Array,
+  image: {
+    picture1: String,
+    picture2: String,
+    picture3: String
+  },
   video: String,
   usersAttending: [mongoose.Schema.Types.ObjectId],
   // category: String
   likes: [],
   dislike:[]
-});
+}, {timestamps: true});
 
 var messageSchema = new mongoose.Schema({
   body: {
@@ -125,8 +126,6 @@ userSchema.methods.findSeenEvents = function(callback){
 
 var Message = mongoose.model("Message", messageSchema);
 var User = mongoose.model("User", userSchema);
-// var UserConnection = mongoose.model("UserConnection", userConnectionSchema);
-// var PotentialConnection = mongoose.model("PotentialConnection", potentialConnectionSchema);
 var UserAction = mongoose.model("UserAction", userActionSchema);
 var EventCard = mongoose.model("EventCard", eventSchema)
 

@@ -19,9 +19,9 @@
     <div class="row">
       <div class="col-md-4 col-lg-4 ">
         <div class="leftcontainer">
-        <h1 class="maintitle">Join an adventure</h1>
-        <button name="leftSwipe" class="likeOrDislike" style="background-color: transparent; border: transparent"><img src="arrow1.png" ></button>
-        </div>
+          <h1 class="maintitle">Join an adventure</h1>  
+        <!-- <button name="leftSwipe" class="likeOrDislike" style="background-color: transparent; border: transparent"><img src="arrow1.png" ></button> -->
+         </div>
       </div>
       <div class="col-md-4 col-lg-4">
       <div class="well">
@@ -44,14 +44,22 @@
           <h3 class="adventuregoing">GOING: 5</h3>
           </div>
           </div>
+          <div class="likedislike">
+          <div class="col-md-6">
+            <button type="button" name="like" class="btn btn-success">Like</button>
+          </div>
+          <div class="col-md-6">
+            <button type="button" name="dislike" class="btn btn-danger">Dislike</button>
+          </div>
+          </div>
           </div>
           </div>
           </div>
         </div>
         <div class="col-md-4 col-lg-4">
         <div class="rightcontainer">
-        <button name="rightSwipe" class="likeOrDislike" style="background-color: transparent; border: transparent"><img src="arrow2.png" ></button>
-        <h1 class="maintitle">Make a new friend</h1>
+        <!-- <button name="rightSwipe" class="likeOrDislike" style="background-color: transparent; border: transparent"><img src="arrow2.png" ></button> -->
+        <h1 class="maintitle">Meet new friends</h1>
       </div>
       </div>
     </div>
@@ -64,8 +72,8 @@
   crossorigin="anonymous"></script>
   <script>
 
-    $(".likeOrDislike").click(function(){
-        $('body').css('background-image', 'url(http://snowbrains.com/wp-content/uploads/2014/01/url-2.jpeg)');
+    $("button").click(function(){
+        $('body').css('background-image', 'url(http://www.japantimes.co.jp/wp-content/uploads/2016/04/sp-snowboard-a-20160429.jpg');
         $('.pic1').attr('src', 'https://www.boardemporium.com/wp-content/uploads/2016/12/tumblr_static_oiodpfpkacgkcck8os4ggs0g.jpg');
     });
     </script>
