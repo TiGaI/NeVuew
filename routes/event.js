@@ -23,7 +23,7 @@ var upload = multer({
       cb(null, {fieldName: file.fieldname});
     },
     Key: function (req, file, cb) {
-      console.log('key', file);
+      // console.log('key', file);
       cb(null, file.orginalname)
     }
   })
@@ -64,32 +64,41 @@ router.get('/getEvents', function(req, res) {
 
   router.get('/createEvent', function(req, res){
     res.render('eventCreate');
-  })
-  /* Create event, can only be done by user. */
-  router.post('/createEvent', upload.fields([{name: 'file', maxCount: 4},
-  { name: 'video', maxCount: 1}]), function(req, res){
-    var eventCard = new EventCard({
-      title: req.body.title,
-      owner: req.user._id,
-      price: req.body.price,
-      category: req.body.category,
-      dateCreated: new Date(),
-      eventStartTime: req.body.eventStartTime,
-      eventEndTime: req.body.eventEndTime,
-      location: req.body.location,
-      image: [req.files[file].location],
-      video: req.files[video].location,
-      usersAttending: []
-    })
-    eventCard.save(function(err){
-      if (err) {
-        res.send(err)
-      } else {
-        res.send('posted Event')
-      }
-    })
+});
 
-  });
+//accesss the more information on the event
+//note: this controller will be gone later once we incoorporate jquery
+
+
+/* Create event, can only be done by user. */
+router.post('/makeEvent', upload.fields([{name: 'file', maxCount: 4},
+	{ name: 'video', maxCount: 1}]), function(req, res){
+    console.log(req.files);
+    //  console.log("files " + req.files['file'][0]['location']);
+    // console.log("video " + req.files['video'][0]['location']);
+
+  var eventCard = new EventCard({
+    title: req.body.title,
+    owner: req.user._id,
+    price: req.body.price,
+    category: req.body.category,
+    dateCreated: new Date(),
+    eventStartTime: req.body.eventStartTime,
+    eventEndTime: req.body.eventEndTime,
+    location: req.body.location,
+    image: req.files['file'][0]['location'],
+    video: req.files['video'][0]['location'],
+    usersAttending: []
+  })
+  eventCard.save(function(err){
+    if (err) {
+      res.send(err)
+    } else {
+      res.send('posted Event')
+    }
+  })
+});
+
 
   //when a user like the event, it send a post request and we save the date
   //into the userAction database. Store all of user action for like and dislike
@@ -131,8 +140,26 @@ router.get('/getEvents', function(req, res) {
 //Owner notification for all usesr that like his event
 //Note: later on we will add a timer for the owner so he need to reply
 //fast, add to the spontenous factor
-router.get('/potentialConnection', function(req, res){
-  res.send(req.user.potentialConnections);
+router.get('/notifications/:eventId', function(req, res){
+  EventCard.findById(eventId, function(err, event){
+
+    if (err) {
+      res.send(err)
+    } else {
+        if(req.user._id === event.owner){
+          res.render('notifications', {user: req.user,
+                                       event: event,
+                                       potentialuser: event.potentialAttendee
+                                      });
+        }else{
+          res.send('You have no access to this page')
+        }
+    }
+
+
+
+  })
+
 
 });
 

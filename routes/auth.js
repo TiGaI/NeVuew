@@ -19,11 +19,9 @@ module.exports = function(passport) {
 
   // POST Login page
   router.post('/', passport.authenticate('local', {
-            successRedirect: '/event',
-            failureRedirect: '/login2'
-        }), function(req, res) {
-    res.redirect('/event');
-  });
+            successRedirect: '/makeEvent',
+            failureRedirect: '/login'
+        }))
 
   // GET registration page
   router.get('/signup', function(req, res) {
@@ -83,7 +81,7 @@ module.exports = function(passport) {
     passport.authenticate('local'), function(req, res){
       res.redirect('/eventSwipe')
   });
-  
+
   // GET Logout page
   router.get('/logout', function(req, res) {
     req.logout();

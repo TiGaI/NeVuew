@@ -1,5 +1,6 @@
 var express = require('express');
 var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
 var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
@@ -10,7 +11,6 @@ var FacebookStrategy = require('passport-facebook');
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
 var models = require('./models/models');
 var compression = require('compression');
-
 //linking file
 var routes = require('./routes/index');
 var auth = require('./routes/auth');
@@ -18,7 +18,13 @@ var message = require('./routes/message');
 var eventApi = require('./routes/event');
 var other = require('./routes/other');
 
+
+var mongoose = require('mongoose');
+var findOrCreate = require('mongoose-findorcreate');
+var connect = process.env.MONGODB_URI || require('./models/connect');
 // var userConnection = require('../userConnection')
+
+mongoose.connect(connect);
 
 var app = express();
 app.use(compression());
@@ -45,7 +51,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Passport stuff here
 var session = require('express-session');
-app.use(session({secret: process.env.secret}));
+app.use(session({
+  secret: process.env.secret,
+  store: new MongoStore({ mongooseConnection: mongoose.connection })
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -62,7 +71,10 @@ passport.deserializeUser(function(id, done) {
 // passport strategy
 passport.use(new LocalStrategy(function(username, password, done) {
     // Find the user with the given username
-    models.User.findOne({ username: username }, function (err, user) {
+    console.log(username)
+
+    models.User.findOne({ email: username }, function (err, user) {
+      console.log(user)
       // if there's an error, finish trying to authenticate (auth failed)
       if (err) {
         console.error(err);
