@@ -4,6 +4,7 @@ var express = require('express');
 var router = express.Router();
 var models = require('../models/models');
 var fromPhone = process.env.FROM_PHONE;
+var mongoose = require('mongoose')
 
 module.exports = function(passport) {
 
@@ -19,7 +20,7 @@ module.exports = function(passport) {
   // POST Login page
   router.post('/', passport.authenticate('local', {
             successRedirect: '/event',
-            failureRedirect: '/login'
+            failureRedirect: '/login2'
         }), function(req, res) {
     res.redirect('/event');
   });
@@ -34,9 +35,11 @@ module.exports = function(passport) {
     return (userData.password === userData.passwordRepeat);
   };
 
-  router.post('/signup', function(req, res) {
-    var fields = ['lname', 'fname', 'email', 'password', 'passwordRepeat']
+  router.post('/login2', function(req, res) {
+    // console.log(req.body)
+    var fields = ['fname', 'lname', 'email', 'password', 'passwordRepeat']
     for (var i = 0; i < fields.length; i++) {
+      // console.log(fields[i])
       var field = fields[i];
       if (! req.body[field]) {
         res.status(400).render('signup', {
@@ -51,14 +54,17 @@ module.exports = function(passport) {
         error: "Passwords don't match."
       });
     }
+    console.log(req.body);
     var u = new models.User({
-      lname: req.body.lname,
       fname: req.body.fname,
+      lname: req.body.lname,
       email: req.body.email,
       password: req.body.password,
     });
-    u.save(function(err, user) {
+    console.log('u')
+    u.save(function(err) {
       if (err) {
+        console.log('in err')
           if (err.errmsg.indexOf('E11000') > -1) {
             err = 'email is already taken: ' + req.body.email;
           } else {
@@ -67,13 +73,17 @@ module.exports = function(passport) {
           res.status(400).render('signup', {
             error: err
           })
-      } 
-      console.log(user);
-      res.redirect('/login');
+      }
     });
+      res.redirect('/eventSwipe');
   });
 
 
+  router.post('/login3',
+    passport.authenticate('local'), function(req, res){
+      res.redirect('/eventSwipe')
+  });
+  
   // GET Logout page
   router.get('/logout', function(req, res) {
     req.logout();

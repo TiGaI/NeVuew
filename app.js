@@ -18,6 +18,8 @@ var message = require('./routes/message');
 var eventApi = require('./routes/event');
 var other = require('./routes/other');
 
+// var userConnection = require('../userConnection')
+
 var app = express();
 app.use(compression());
 // view engine setup
@@ -29,6 +31,11 @@ var hbs = require('express-handlebars')({
 });
 app.engine('hbs', hbs);
 app.set('view engine', 'hbs');
+
+var mongoose = require('mongoose');
+var findOrCreate = require('mongoose-findorcreate');
+var connect = process.env.MONGODB_URI || require('./models/connect');
+mongoose.connect(connect);
 
 app.use(logger('dev'));
 app.use(bodyParser.json());

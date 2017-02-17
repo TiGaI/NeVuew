@@ -7,7 +7,9 @@ var router = express.Router();
 
 //model
 var User  = require('../models/models').User;
-var Event  = require('../models/models').Event;
+var EventCard  = require('../models/models').EventCard;
+var UserAction = require('../models/models').UserAction;
+
 
 var s3 = new aws.S3();
 router.use(bodyParser.json());
@@ -16,25 +18,17 @@ router.use(bodyParser.urlencoded({ extended: false }));
 var upload = multer({
   storage: multerS3({
     s3: s3,
-    bucket: 'newvuew',
+    bucket: 'newvuew-julian',
     metadata: function (req, file, cb) {
       cb(null, {fieldName: file.fieldname});
     },
-    key: function (req, file, cb) {
+    Key: function (req, file, cb) {
       console.log('key', file);
       cb(null, file.orginalname)
     }
   })
 });
 
-// Require login past this point.
-router.use('/', function(req, res, next){
-  if (!req.user) {
-    res.redirect('/');
-  } else {
-    return next();
-  }
-});
 
 /* GET event, tinder like view for random event that gear through the user. */
 router.get('/getEvents', function(req, res) {
@@ -42,9 +36,9 @@ router.get('/getEvents', function(req, res) {
   var sort = req.query.sort;
   //Will eventually implement AJAX
   var myId = req.user._id; //This would be req.user in practice
-  models.User.findById(myId).exec(function(err, user){
+  User.findById(myId).exec(function(err, user){
     user.findSeenEvents(function(err, events){
-      models.EventCard.find({_id: {"$nin": events}})
+      EventCard.find({_id: {"$nin": events}})
       .sort({sort: -1})
       .limit(10)
       .exec(
@@ -68,10 +62,13 @@ router.get('/getEvents', function(req, res) {
     })
   });
 
+  router.get('/createEvent', function(req, res){
+    res.render('eventCreate');
+  })
   /* Create event, can only be done by user. */
-  router.post('/makeEvent', upload.fields([{name: 'file', maxCount: 4},
+  router.post('/createEvent', upload.fields([{name: 'file', maxCount: 4},
   { name: 'video', maxCount: 1}]), function(req, res){
-    var eventCard = new models.EventCard({
+    var eventCard = new EventCard({
       title: req.body.title,
       owner: req.user._id,
       price: req.body.price,
@@ -103,73 +100,80 @@ router.get('/getEvents', function(req, res) {
       eventCard: req.param.eventid,
       likeOrDislike: (req.body.swipe === 'leftSwipe')? false:true //req.body.swipe is defined in AJAX
     });
-    models.EventCard.findById(req.param.eventid).exec(function(err, eventCard){
+    EventCard.findById(req.param.eventid).exec(function(err, eventCard){
       if (err) {
         res.send(err)
       }
-      models.User.findById(event.owner).exec(function(err, user){
+      User.findById(event.owner).exec(function(err, user){
         if (err) {
           res.send(err)
         }
-        if(userAction.likeOrDislike){
-          user.potentialConnection.push(req.user._id)
-          user.save(err){
+        if (userAction.likeOrDislike){
+          user.potentialConnection.push(req.user._id);
+          user.save(function(err){
             if(err) {
               res.send(err)
             }
-          }
+          });
         }
-        userAction.save(err){
-          if(err) {
-            res.send(err){
-            } else {
-              res.send('Saved User/UserAction')
-            }
-          }
+      });
+      userAction.save(function(err){
+        if(err) {
+          res.send(err)
+        } else {
+          res.send('Saved User/UserAction')
         }
-      })
+      });
     })
   });
 
-  //Owner notification for all usesr that like his event
-  //Note: later on we will add a timer for the owner so he need to reply
-  //fast, add to the spontenous factor
-  router.get('/potentialConnection', function(req, res){
-    res.send(req.user.potentialConnections);
 
-  });
+//Owner notification for all usesr that like his event
+//Note: later on we will add a timer for the owner so he need to reply
+//fast, add to the spontenous factor
+router.get('/potentialConnection', function(req, res){
+  res.send(req.user.potentialConnections);
 
-  //Owner can decide whether or not he will accept/decline the person
-  //match the user, send notification to the user, the owner and the user
-  //now can connect using messager as well as access more detail profile
-  //of the owner.
-  //Depend on the decision of the owner, User.Connection will be populate
-  //for the owner and user, thus they are connected.
-  //Also start a conversation between the owner and user, template saying,
-  //you guy are connected! Let have a adventure together
+});
 
-  //Note: time limit will be add later.
-  //Later on: the owner can set auto-accept for trust worthy people with
-  //higher rating
-  router.post('/potentialConnection/:userId', function(req, res){
-    var user1 = req.user;
-    var user2Id
-    user1.connections.push(user2Id);
-    user1.save(err){
-      if (err){
+//Owner can decide whether or not he will accept/decline the person
+//match the user, send notification to the user, the owner and the user
+//now can connect using messager as well as access more detail profile
+//of the owner.
+//Depend on the decision of the owner, User.Connection will be populate
+//for the owner and user, thus they are connected.
+//Also start a conversation between the owner and user, template saying,
+//you guy are connected! Let have a adventure together
+
+//Note: time limit will be add later.
+//Later on: the owner can set auto-accept for trust worthy people with
+//higher rating
+router.post('/potentialConnection/:userId', function(req, res){
+  var user1 = req.user;
+  var user2Id
+  user1.connections.push(user2Id);
+  user1.save(function(err){
+    if (err){
+      res.send(err)
+    }
+  })
+  User.findById(user2Id).exec(function(err, user2){
+    user2.connections.push(user1._id);
+    user2.save(function(err){
+      if(err){
         res.send(err)
       }
-    }
-    User.findById(user2Id).exec(function(err, user2){
-      user2.connections.push(user1._id);
-      user2.save(err){
-        if(err){
-          res.send(err)
-        }
-      }
     })
-    res.send('connection made')
-  });
+  })
+  res.send('connection made')
+});
 
+router.use('/', function(req, res, next){
+  if (!req.user) {
+    res.redirect('/');
+  } else {
+    return next();
+  }
+});
 
-  module.exports = router;
+module.exports = router;

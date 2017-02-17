@@ -27,6 +27,9 @@ router.get('/eventSwipe', function(req,res){
 router.get('/login2', function(req,res){
 	res.render('login2');
 });
+router.get('/login3', function(req,res){
+	res.render('login3');
+});
 router.get('/message', function(req,res){
 	res.render('message');
 });

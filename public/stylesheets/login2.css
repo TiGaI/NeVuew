@@ -1,5 +1,5 @@
 body{
-  /*background: url("https://static.pexels.com/photos/9692/pexels-photo.jpeg") no-repeat center center fixed; 
+  /*background: url("https://static.pexels.com/photos/9692/pexels-photo.jpeg") no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -21,7 +21,7 @@ button{
 
 }
 input{
-  
+
   height: 40px;
   width: 90%;
   margin-top: 10px;
@@ -94,7 +94,7 @@ button[name=loginbutton]{
   font-size: 20px;
   padding-left: 20px;
 }
-button[name=register], button[name=login]{
+button[name=register], button[name=login], button[name=register]{
   font-size: 18px;
   font-weight: normal;
   margin-top: 10px;
