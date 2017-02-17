@@ -77,7 +77,8 @@ var eventSchema = new mongoose.Schema({
   usersAttending: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
   // category: String
   likes: [],
-  dislike:[]
+  dislike:[],
+  pendingConnections: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
 }, {timestamps: true});
 
 var messageSchema = new mongoose.Schema({
