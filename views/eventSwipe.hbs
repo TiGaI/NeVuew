@@ -23,6 +23,8 @@
         <!-- <button name="leftSwipe" class="likeOrDislike" style="background-color: transparent; border: transparent"><img src="arrow1.png" ></button> -->
          </div>
       </div>
+      {{#each eventsQueue}}
+      <div class="eventcontainer">
       <div class="col-md-4 col-lg-4">
       <div class="well">
         <div class="adventurecontainer">
@@ -31,17 +33,17 @@
           </div>
            <img src="http://www.pregreat.com/assets/Havingfun.jpg" class="profileimage">
           <div class="adventurebottom">
-          <h3 class="adventuretitle">WHITEWATER RAFTING</h3>
-          <p>Join me for an amazing adventure out in the beautiful rivers of California.</p>
+          <h3 class="adventuretitle">{{this.title}}</h3>
+          <p>{{this.description}}</p>
           <div class="adventurefooter">
           <div class="col-md-4 ">
-          <h3 class="adventuredate">COST: $50</h3>
+          <h3 class="adventuredate">COST: {{this.price}}</h3>
           </div>
           <div class="col-md-4">
-          <h3 class="adventuretime">TIME: 5:00 PM</h3>
+          <h3 class="adventuretime">{{this.startTime}}</h3>
           </div>
           <div class="col-md-4">
-          <h3 class="adventuregoing">GOING: 5</h3>
+          <h3 class="adventuregoing">GOING: {{this.usersAttending.length}}</h3>
           </div>
           </div>
           <div class="likedislike">
@@ -63,6 +65,8 @@
       </div>
       </div>
     </div>
+    {{/each}}
+    </div>
   </div>
 </div>
 
@@ -74,6 +78,16 @@
   crossorigin="anonymous"></script>
   <script>
 
+  $('.likeOrDislike').on('click', function(){
+    var data= {swipe: $(this).attr('name')};
+    data.swipe=$(this).attr('name')
+
+    $.ajax({
+      url: 'likes/'+ 
+    })
+  })
+
+    
     $("button").click(function(){
         $('body').css('background-image', 'url(http://www.japantimes.co.jp/wp-content/uploads/2016/04/sp-snowboard-a-20160429.jpg');
         $('.pic1').attr('src', 'https://www.boardemporium.com/wp-content/uploads/2016/12/tumblr_static_oiodpfpkacgkcck8os4ggs0g.jpg');

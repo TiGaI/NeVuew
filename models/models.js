@@ -58,11 +58,17 @@ var eventSchema = new mongoose.Schema({
     ref: 'User',
     // required: true
   },
+  description: {
+    type: String,
+    required: true
+  },
   category: String,
-  price: Number,
-  dateCreated: Date,
   eventStartTime: String,
   eventEndTime: String,
+  price: {
+    type: Number,
+    required: String
+  },
   location: String,
   image: {
     picture1: String,
