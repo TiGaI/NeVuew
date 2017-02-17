@@ -30,8 +30,7 @@ var userSchema = new mongoose.Schema({
   },
   //Need to Hash Password
   password: {
-    type: String,
-    required: true
+    type: String
   },
   bio: {
     type: String,
@@ -65,8 +64,15 @@ var eventSchema = new mongoose.Schema({
     ref: 'User',
     // required: true
   },
+  description: {
+    type: String,
+    required: true
+  },
   category: String,
-  price: Number,
+  price: {
+    type: Number,
+    required: String
+  },
   eventStartTime: Date,
   eventEndTime: Date,
   location: String,

@@ -27,10 +27,24 @@ module.exports = function(passport) {
     res.render('signup');
   });
 
-  router.post('/login', passport.authenticate('local', {
-            successRedirect: '/eventSwipe',
-            failureRedirect: '/'
-  }));
+  router.post('/login', passport.authenticate('local'), function(req, res){
+    models.User.findById(req.user._id).exec(function(err, user){
+      console.log('2')
+      user.findSeenEvents(function(err, events){
+        models.EventCard.find({_id:{"$nin": events}})
+        .sort({eventStartTime: -1})
+        .limit(10)
+        .exec(
+          err, function(err, eventsQueue){
+            if (err){
+              res.send(err)
+            } 
+            console.log(eventsQueue)
+            res.render('eventSwipe', {eventsQueue: eventsQueue})
+          })
+      })
+    })        
+  });
 
   // POST registration page
   var validateReq = function(userData) {
@@ -86,13 +100,28 @@ module.exports = function(passport) {
   // FACEBOOK
 
   router.get('/auth/facebook',
-    passport.authenticate('facebook'));
+    passport.authenticate('facebook', { scope: [ 'email' ] }));
 
   router.get('/auth/facebook/callback',
     passport.authenticate('facebook', { failureRedirect: '/login' }),
     function(req, res) {
       // Successful authentication, redirect home.
-      res.redirect('/event');
+          models.User.findById(req.user._id).exec(function(err, user){
+      console.log('2')
+      user.findSeenEvents(function(err, events){
+        models.EventCard.find({_id:{"$nin": events}})
+        .sort({eventStartTime: -1})
+        .limit(10)
+        .exec(
+          err, function(err, eventsQueue){
+            if (err){
+              res.send(err)
+            } 
+            console.log(eventsQueue)
+            res.render('eventSwipe', {eventsQueue: eventsQueue})
+          })
+      })
+    }) 
     });
 
     router.get('/auth/google',
@@ -102,7 +131,22 @@ module.exports = function(passport) {
       passport.authenticate('google', { failureRedirect: '/login' }),
       function(req, res) {
         // Successful authentication, redirect home.
-        res.redirect('/event');
+            models.User.findById(req.user._id).exec(function(err, user){
+      console.log('2')
+      user.findSeenEvents(function(err, events){
+        models.EventCard.find({_id:{"$nin": events}})
+        .sort({eventStartTime: -1})
+        .limit(10)
+        .exec(
+          err, function(err, eventsQueue){
+            if (err){
+              res.send(err)
+            } 
+            console.log(eventsQueue)
+            res.render('eventSwipe', {eventsQueue: eventsQueue})
+          })
+      })
+    }) 
       });
 
   return router;

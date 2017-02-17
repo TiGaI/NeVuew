@@ -28,13 +28,13 @@ var upload = multer({
 });
 
 // Require login past this point.
-router.use('/', function(req, res, next){
-  if (!req.user) {
-    res.redirect('/');
-  } else {
-    return next();
-  }
-});
+// router.use('/', function(req, res, next){
+//   if (!req.user) {
+//     res.redirect('/');
+//   } else {
+//     return next();
+//   }
+// });
 
 /* GET event, tinder like view for random event that gear through the user. */
 router.get('/getEvents', function(req, res) {

@@ -87,13 +87,39 @@ passport.use(new LocalStrategy(function(username, password, done) {
 passport.use(new FacebookStrategy({
     clientID: process.env.FACEBOOK_APP_ID,
     clientSecret: process.env.FACEBOOK_APP_SECRET,
-    callbackURL: "http://localhost:3000/auth/facebook/callback"
+    callbackURL: "http://localhost:3000/auth/facebook/callback",
+    profileFields: ['id', 'displayName', 'name', 'photos', 'email']
   },
-  function(accessToken, refreshToken, profile, cb) {
-    models.User.findOrCreate({ facebookId: profile.id }, function (err, user) {
-      return cb(err, user);
-    });
-  }
+  function(accessToken, refreshToken, profile, done) {
+        
+    console.log(profile);
+
+        models.User.findOne({
+            email: profile.emails[0].value
+        }, function(err, user) {
+            if (err) {
+                return done(err);
+            }
+            if (!user) {
+                var fullName = profile.displayName.split(' ');
+                var firstName = fullName[0];
+                var lastName = fullName[fullName.length - 1];
+                user = new models.User({
+                    fname: firstName,
+                    lname: lastName,
+                    email: profile.emails[0].value, 
+                    image: profile.photos ? profile.photos[0].value : 'http://shurl.esy.es/y'         
+                });
+                user.save(function(err) {
+                    if (err) console.log(err);
+                    return done(err, user);
+                });
+            }else {
+                //found user. Return
+                return done(err, user);
+            }
+        });
+    }
 ));
 
 passport.use(new GoogleStrategy({
