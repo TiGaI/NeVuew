@@ -12,9 +12,25 @@ var	Message  = require('../models/models').Message;
 
 module.exports = function(io) {
 
-	router.get('/conversation', function(req, res){
-		res.render('conversation');
+	router.get('/conversation', function(req,res) {
+		res.render('conversation', {user: req.user, message: {}});		
 	});
+
+	router.get('/conversation/:userid', function(req,res) {
+
+		Message.find({ $or: [{user1: req.params.userid, user2: req.user._id}, 
+				{user2: req.params.userid, user1: req.user._id}]})
+			.sort('dateCreated').exec(function(err, message){
+				if(err){
+					res.send('invalid Message, conversation does not exist')
+					res.redirect('/connections/req.user._id')
+				}else{
+					res.render('conversation', {user: req.user, message: message});
+				}
+			});	
+	});
+
+
 
 	// first time someone connects
 	io.on('connection', function(socket){
