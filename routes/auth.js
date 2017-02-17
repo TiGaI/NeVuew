@@ -18,7 +18,7 @@ module.exports = function(passport) {
 
   // POST Login page
   router.post('/', passport.authenticate('local', {
-            successRedirect: '/makeEvent',
+            successRedirect: '/conversation',
             failureRedirect: '/login'
         }))
 
@@ -87,7 +87,7 @@ module.exports = function(passport) {
     passport.authenticate('facebook', { failureRedirect: '/login' }),
     function(req, res) {
       // Successful authentication, redirect home.
-      res.redirect('/event');
+      res.redirect('/conversation');
     });
 
     router.get('/auth/google',
@@ -97,7 +97,7 @@ module.exports = function(passport) {
       passport.authenticate('google', { failureRedirect: '/login' }),
       function(req, res) {
         // Successful authentication, redirect home.
-        res.redirect('/event');
+        res.redirect('/conversation');
       });
 
   return router;

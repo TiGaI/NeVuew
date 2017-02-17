@@ -11,8 +11,9 @@ var	Message  = require('../models/models').Message;
 
 
 module.exports = function(io) {
-
+	
 	router.get('/conversation', function(req,res) {
+		console.log(req.user.image);
 		res.render('conversation', {user: req.user, message: {}});		
 	});
 
