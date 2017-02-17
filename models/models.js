@@ -16,7 +16,7 @@ var userActionSchema = new mongoose.Schema({
     ref: 'EventCard'
   },
   likeOrDislike: Boolean // true refers to like, false refers to dislike.
-})
+}, {timestamps: true})
 
 var userSchema = new mongoose.Schema({
   //How can we keep track of User Activity?
@@ -37,7 +37,6 @@ var userSchema = new mongoose.Schema({
     type: String,
     default: ""
   },
-  created: Date,
   email: {
     type: String,
     required: true
@@ -56,7 +55,7 @@ var userSchema = new mongoose.Schema({
   eventQueue : {
     type: [EventCard]
   }
-});
+}, {timestamps: true});
 
 var eventSchema = new mongoose.Schema({
   title: {
@@ -70,17 +69,20 @@ var eventSchema = new mongoose.Schema({
   },
   category: String,
   price: Number,
-  dateCreated: Date,
   eventStartTime: Date,
   eventEndTime: Date,
   location: String,
-  image: Array,
+  image: {
+    picture1: String,
+    picture2: String,
+    picture3: String
+  },
   video: String,
   usersAttending: [mongoose.Schema.Types.ObjectId],
   // category: String
   likes: [],
   dislike:[]
-});
+}, {timestamps: true});
 
 var messageSchema = new mongoose.Schema({
   body: {

@@ -1,0 +1,76 @@
+<button class = "likeOrDislike" name = "leftSwipe">Test</button>
+
+<script src="../jquery.js"></script>
+<script src="../models/models.js"></script>
+<script src="../app-PostManTesting.js"></script>
+
+<script>
+var array = [];
+var currentCard;
+
+
+function getEvents(){
+  if (array.length === 0){
+    $.ajax({
+      url: '/getEvents',
+      method: 'get',
+      data: {
+        sort: {startDate: -1 }
+      }, //req.body post == body get == query
+      success: function(res) {
+        console.log(res);
+        array = res; // loads event into array .
+        showCurrentCard()
+      } //callback
+    })
+  }
+}
+
+
+$('.likeOrDislike').on('click', function(){
+  var data = {swipe: $(this).attr('name')};
+  data.swipe=$(this).attr('name') // either leftSwipe or rightswipe
+
+  $.ajax({
+    url: '/likes/'+currentCard._id,
+    method: 'post',
+    data: data,
+    success: function(res){
+      if (data.swipe === 'leftSwipe') {;
+        var userAction = new UserAction({
+          user: req.user._id,
+          eventCard: currentCard._id,
+          likeOrDislike: false
+        })
+        setNextCard();
+      } else {
+        var userAction = new UserAction({
+          user: req.user._id,
+          eventCard: currentCard._id,
+          likeOrDislike: true
+        })
+        setNextCard();
+      }
+    }
+  });
+});
+
+  function setNextCard(){
+    if (array.length>0){
+      showCurrentCard();
+    }else{
+      getEvents();
+    }
+  }
+
+  function showCurrentCard(){
+    currentEvent = array.pop()
+    //TODO: show stuff onscreen
+  }
+
+  $( document ).ready(function() {
+    console.log('ey')
+    getEvents();
+  });
+
+  </script>
