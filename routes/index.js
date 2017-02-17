@@ -30,6 +30,9 @@ router.get('/login2', function(req,res){
 router.get('/message', function(req,res){
 	res.render('message');
 });
+router.get('/conversation', function(req,res) {
+	res.render('conversation');
+});
 
 
 module.exports = router;

@@ -7,7 +7,7 @@ var router = express.Router();
 
 //model
 var User  = require('../models/models').User;
-var Event  = require('../models/models').Event;
+var EventCard  = require('../models/models').EventCard;
 
 var s3 = new aws.S3();
 router.use(bodyParser.json());
@@ -20,8 +20,8 @@ var upload = multer({
     metadata: function (req, file, cb) {
       cb(null, {fieldName: file.fieldname});
     },
-    key: function (req, file, cb) {
-      console.log('key', file);
+    Key: function (req, file, cb) {
+      // console.log('key', file);
       cb(null, file.orginalname)
     }
   })

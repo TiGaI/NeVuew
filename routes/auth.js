@@ -122,7 +122,7 @@ module.exports = function(passport) {
           })
       })
     }) 
-    });
+  });
 
     router.get('/auth/google',
       passport.authenticate('google', { scope: ['profile'] }));
